@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useState, useEffect, Suspense } from 'react';
 import React from "react";
 import { supabase } from '@/lib/supabase';
@@ -90,6 +92,10 @@ function RegisterContent() {
 
   useEffect(() => {
     const getUser = async () => {
+      if (!supabase) {
+        router.push('/auth');
+        return;
+      }
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         router.push('/auth');
@@ -108,7 +114,7 @@ function RegisterContent() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!profile || !sport) return;
+    if (!profile || !sport || !supabase) return;
     setLoading(true);
     try {
       const { error } = await supabase
