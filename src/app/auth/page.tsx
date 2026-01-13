@@ -38,7 +38,8 @@ export default function Auth() {
         if (error) throw error
         setDialogMsg('Login successful! Redirecting...')
         setOpen(true)
-        setTimeout(() => router.push('/sports'), 1200)
+        // Use window.location for full page reload to sync cookies
+        setTimeout(() => window.location.href = '/sports', 1200)
       } else {
         const { error } = await supabase.auth.signUp({
           email,

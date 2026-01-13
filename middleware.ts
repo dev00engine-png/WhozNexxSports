@@ -32,6 +32,15 @@ export async function middleware(req: NextRequest) {
           cookies.forEach(({ name, value, options }) => {
             response.cookies.set(name, value, options)
           })
+          // Create new response with updated cookies
+          response = NextResponse.next({
+            request: {
+              headers: req.headers,
+            },
+          })
+          cookies.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options)
+          })
         },
       },
     }
