@@ -18,7 +18,7 @@ export default function Home() {
         <div className="backdrop-blur-lg bg-black/40 rounded-full p-4 shadow-2xl flex items-center justify-center animate-pulse">
           <img
             src="/logo88.png"
-            alt="Logo88 Sports"
+            alt="Whoz Nexx Sports Logo"
             className="h-24 w-auto drop-shadow-[0_0_16px_rgba(255,0,0,0.8)] animate-glow"
             style={{ filter: 'drop-shadow(0 0 32px #ff0000)' }}
           />
@@ -28,7 +28,7 @@ export default function Home() {
         <Card className="bg-black/80 border-red-700 shadow-2xl max-w-3xl w-full p-8 rounded-xl">
           <CardContent className="flex flex-col items-center">
             <h1 className="text-5xl font-extrabold text-center mb-4 tracking-tight text-white drop-shadow-lg">
-              Logo88
+              Whoz Nexx Sports
             </h1>
             <p className="text-center mb-6 text-lg text-red-200 max-w-2xl">
               <span className="font-semibold text-red-400">Sign up your child for an unforgettable sports experience!</span> <br />
@@ -55,7 +55,7 @@ export default function Home() {
           </CardContent>
         </Card>
         <footer className="mt-12 text-center text-xs text-red-300">
-          © 2026 Logo88. All rights reserved.
+          © 2026 Whoz Nexx Sports. All rights reserved.
         </footer>
       </div>
     </div>

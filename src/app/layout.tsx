@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Logo88 Sports",
+  title: "Whoz Nexx Sports",
   description: "Sports registration for kids",
 };
 
