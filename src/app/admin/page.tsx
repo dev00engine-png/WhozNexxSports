@@ -40,7 +40,7 @@ export default function Admin() {
         .eq('user_id', user.id)
         .single()
 
-      if (profile?.role !== 'admin') {
+      if ((profile as any)?.role !== 'admin') {
         alert('Access denied')
         router.push('/')
         return

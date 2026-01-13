@@ -13,8 +13,6 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Goal, Medal, Trophy, Dribbble } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-
 const sportDetails: Record<string, { icon: any; image: string; intro: React.ReactNode }> = {
   football: {
     icon: Goal,
@@ -117,7 +115,7 @@ function RegisterContent() {
     if (!profile || !sport || !supabase) return;
     setLoading(true);
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('kids')
         .insert({
           parent_id: profile.id,
