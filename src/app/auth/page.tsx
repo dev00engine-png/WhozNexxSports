@@ -41,11 +41,15 @@ export default function Auth() {
         // Use window.location for full page reload to sync cookies
         setTimeout(() => window.location.href = '/sports', 1200)
       } else {
+        const productionUrl = 'https://whoznexxsports.team'
+        const redirectUrl = process.env.NODE_ENV === 'production' 
+          ? `${productionUrl}/auth/callback?next=/auth`
+          : `${window.location.origin}/auth/callback?next=/auth`
         const { error } = await supabase.auth.signUp({
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback?next=/auth`,
+            emailRedirectTo: redirectUrl,
             data: {
               name,
               phone,
