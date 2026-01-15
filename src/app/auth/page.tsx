@@ -41,14 +41,11 @@ export default function Auth() {
         // Use window.location for full page reload to sync cookies
         setTimeout(() => window.location.href = '/sports', 1200)
       } else {
-        const baseUrl = typeof window !== 'undefined'
-          ? window.location.origin
-          : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
         const { error } = await supabase.auth.signUp({
           email,
           password,
           options: {
-            emailRedirectTo: `${baseUrl}/auth/callback?next=/auth`,
+            emailRedirectTo: `${window.location.origin}/auth/callback?next=/auth`,
             data: {
               name,
               phone,
