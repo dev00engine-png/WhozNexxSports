@@ -9,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { User, LogIn, UserPlus } from 'lucide-react'
 
 export default function Auth() {
@@ -45,6 +45,7 @@ export default function Auth() {
           email,
           password,
           options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback?next=/auth`,
             data: {
               name,
               phone,
@@ -52,7 +53,7 @@ export default function Auth() {
           },
         })
         if (error) throw error
-        setDialogMsg('Sign up successful! Check your email for verification.')
+        setDialogMsg('Sign up successful! Check your email for verification. After confirming, you will be redirected to login.')
         setOpen(true)
       }
     } catch (error: any) {
@@ -166,6 +167,7 @@ export default function Auth() {
       </Card>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="bg-black/90 border-red-700 text-white">
+          <DialogTitle className="sr-only">Authentication Status</DialogTitle>
           <div className="flex flex-col items-center gap-4">
             <span className="bg-black/60 rounded-full p-3 mb-2 animate-bounce shadow-lg">
               <User className="w-10 h-10 text-red-500 drop-shadow-lg" />
