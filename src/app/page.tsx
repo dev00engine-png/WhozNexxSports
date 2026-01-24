@@ -46,16 +46,17 @@ export default function Home() {
                   Sign Up / Login
                 </Button>
               </Link>
-              <Link href="/admin" className="w-full md:w-auto">
-                <Button variant="outline" className="w-full border-red-600 text-red-600 hover:bg-red-900 hover:text-white font-bold py-3 px-8 rounded-lg text-lg shadow-md">
-                  Admin Access
-                </Button>
-              </Link>
             </div>
           </CardContent>
         </Card>
-        <footer className="mt-12 text-center text-xs text-red-300">
+        <footer className="mt-12 text-center text-xs text-red-300 relative group">
           © Feb 25, 2026 Whoz Nexx Sports. All rights reserved.
+          <span className="absolute left-1/2 -translate-x-1/2 bottom-[-1.5rem] opacity-0 hover:opacity-100 transition-opacity duration-300 group-hover:opacity-100">
+            <Link href="/admin" tabIndex={-1} aria-label="Admin Access" className="text-[0.1px] select-none pointer-events-auto focus:opacity-100 focus:text-blue-400" style={{ position: 'absolute', left: '-9999px' }}>Admin</Link>
+          </span>
+          <span className="block text-[0.1px] select-none opacity-0 group-hover:opacity-100">
+            <Link href="/admin" tabIndex={-1} aria-label="Admin Access" className="text-[0.1px] select-none pointer-events-auto focus:opacity-100 focus:text-blue-400">Admin</Link>
+          </span>
         </footer>
       </div>
     </div>
