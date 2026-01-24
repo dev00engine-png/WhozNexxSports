@@ -39,9 +39,15 @@ export async function GET(request: NextRequest) {
         },
       }
     )
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      return NextResponse.redirect(`${origin}${next}`)
+    try {
+      const { error } = await supabase.auth.exchangeCodeForSession(code)
+      if (!error) {
+        return NextResponse.redirect(`${origin}${next}`)
+      }
+    } catch (err) {
+      // If the Supabase host is unreachable or fetch fails, log and redirect to auth
+      console.error('Supabase fetch error in auth callback:', err)
+      return NextResponse.redirect(`${origin}/auth?error=service_unavailable`)
     }
   }
 

@@ -46,9 +46,18 @@ export async function middleware(req: NextRequest) {
     }
   )
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  let session = null
+  try {
+    const {
+      data: { session: _session },
+    } = await supabase.auth.getSession()
+    session = _session
+  } catch (err) {
+    // If Supabase is unreachable (DNS, network), avoid crashing middleware.
+    // Allow the request to continue so the app can show an error page/client-side handling.
+    console.error('Supabase fetch error in middleware:', err)
+    return response
+  }
 
   // Protect routes that require authentication
   if (req.nextUrl.pathname.startsWith('/sports') ||
