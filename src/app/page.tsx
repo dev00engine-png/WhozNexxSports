@@ -55,7 +55,7 @@ export default function Home() {
           </CardContent>
         </Card>
         <footer className="mt-12 text-center text-xs text-red-300">
-          © 2026 Whoz Nexx Sports. All rights reserved.
+          © Feb 25, 2026 Whoz Nexx Sports. All rights reserved.
         </footer>
       </div>
     </div>
