@@ -68,7 +68,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.9 }}
-          className="relative z-10 font-brand text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-center text-luxury leading-tight px-2"
+          className="relative z-10 font-brand text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-black text-center text-luxury leading-tight px-2"
         >
           WhozNexxSports
         </motion.h1>
