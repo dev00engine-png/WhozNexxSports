@@ -99,21 +99,7 @@ export default function CoachSignupForm() {
   }
 
   return (
-    <div className="relative">
-      {/* Floating mosaic collage background */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute left-1/2 top-10 w-[1400px] max-w-none -translate-x-1/2 opacity-40 grid grid-cols-6 gap-4 pointer-events-none">
-          <motion.img whileHover={{ scale: 1.06, rotate: 2 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach1.jpg" alt="" className="w-40 h-40 object-cover rounded-xl shadow-2xl transform rotate-3 translate-y-2" />
-          <motion.img whileHover={{ scale: 1.05, rotate: -3 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach2.jpg" alt="" className="w-36 h-36 object-cover rounded-lg shadow-xl transform -rotate-6 -translate-y-2" />
-          <motion.img whileHover={{ scale: 1.07, rotate: 4 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach3.jpg" alt="" className="w-44 h-44 object-cover rounded-2xl shadow-2xl transform rotate-6 translate-y-1" />
-          <motion.img whileHover={{ scale: 1.05, rotate: -2 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach4.jpg" alt="" className="w-36 h-36 object-cover rounded-lg shadow-xl transform -rotate-3 translate-y-3" />
-          <motion.img whileHover={{ scale: 1.06, rotate: 1 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach5.jpg" alt="" className="w-40 h-40 object-cover rounded-xl shadow-2xl transform rotate-2 -translate-y-1" />
-          <motion.img whileHover={{ scale: 1.05, rotate: -5 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach6.jpg" alt="" className="w-36 h-36 object-cover rounded-lg shadow-xl transform -rotate-8 translate-y-4" />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/90 to-black/95" />
-      </div>
-
-      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-gradient-to-br from-black/70 via-black/60 to-black/50 rounded-3xl shadow-2xl p-8 sm:p-12 space-y-6 border border-red-900/20 backdrop-blur-md">
+    <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-gradient-to-br from-black/70 via-black/60 to-black/50 rounded-3xl shadow-2xl p-8 sm:p-12 space-y-6 border border-red-900/20 backdrop-blur-md">
       <div className="flex items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl font-brand font-bold text-white mb-1">Coach Application</h2>

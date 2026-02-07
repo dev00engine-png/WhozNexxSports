@@ -1,33 +1,39 @@
 "use client";
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import CoachSignupForm from './CoachSignupForm';
+
+const images = ['/coach1.jpg','/coach2.jpg','/coach3.jpg','/coach4.jpg','/coach5.jpg','/coach6.jpg'];
 
 export default function Page() {
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-black via-black/90 to-black flex items-center justify-center py-12 px-4">
-			<div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-				<motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }} className="hidden lg:block">
-					<div className="relative rounded-3xl overflow-hidden shadow-2xl">
-						<div className="grid grid-cols-2 gap-3 p-6 bg-black/40">
-							<img src="/coach1.jpg" alt="" className="w-full h-48 object-cover rounded-lg transform hover:scale-105 transition" />
-							<img src="/coach2.jpg" alt="" className="w-full h-48 object-cover rounded-lg transform hover:scale-105 transition" />
-							<img src="/coach3.jpg" alt="" className="w-full h-48 object-cover rounded-lg transform hover:scale-105 transition" />
-							<img src="/coach4.jpg" alt="" className="w-full h-48 object-cover rounded-lg transform hover:scale-105 transition" />
-						</div>
-						<div className="p-6 bg-gradient-to-t from-black/60 to-transparent">
-							<h1 className="font-brand text-3xl font-bold text-white mb-2">Join WhozNexxSports</h1>
-							<p className="text-gray-300">Bring your coaching experience and passion to our community. Help build champions on and off the field.</p>
-							<div className="mt-4">
-								<Link href="/admin" className="text-sm text-red-400 hover:underline">Admin Panel →</Link>
-							</div>
-						</div>
-					</div>
-				</motion.div>
+			<div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+				{/* Left rolling collage */}
+				<div className="hidden lg:block">
+					<motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }} className="h-[720px] overflow-hidden rounded-2xl">
+						<motion.div animate={{ y: [0, -360, 0] }} transition={{ duration: 14, repeat: Infinity, ease: 'linear' }} className="space-y-4 p-2">
+							{images.concat(images).map((src, i) => (
+								<img key={`l-${i}`} src={src} alt="" className="w-full h-40 object-cover rounded-xl shadow-xl" />
+							))}
+						</motion.div>
+					</motion.div>
+				</div>
 
-				<motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="w-full">
+				{/* Center form */}
+				<motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="w-full">
 					<CoachSignupForm />
 				</motion.div>
+
+				{/* Right rolling collage */}
+				<div className="hidden lg:block">
+					<motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }} className="h-[720px] overflow-hidden rounded-2xl">
+						<motion.div animate={{ y: [0, -360, 0] }} transition={{ duration: 18, repeat: Infinity, ease: 'linear' }} className="space-y-4 p-2">
+							{images.slice().reverse().concat(images.slice().reverse()).map((src, i) => (
+								<img key={`r-${i}`} src={src} alt="" className="w-full h-40 object-cover rounded-xl shadow-xl" />
+							))}
+						</motion.div>
+					</motion.div>
+				</div>
 			</div>
 		</div>
 	);
