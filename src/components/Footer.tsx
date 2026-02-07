@@ -247,7 +247,6 @@ export default function Footer() {
                         key={s.key}
                         onClick={() => setFilter(s.key)}
                         className={`glass rounded-lg p-1.5 sm:p-2 text-center transition-all text-xs flex-shrink-0 ${
-                        className={`glass rounded-lg p-1.5 sm:p-2 text-center transition-all text-xs flex-shrink-0 ${
                           filter === s.key ? 'bg-red-900/30 border border-red-600/40' : 'hover:bg-red-900/10'
                         }`}
                       >
