@@ -5,12 +5,12 @@ export const dynamic = 'force-dynamic'
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent } from '@/components/ui/card'
+import { motion } from 'framer-motion'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
-import { User, LogIn, UserPlus, KeyRound } from 'lucide-react'
+import { LogIn, UserPlus, KeyRound, User } from 'lucide-react'
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true)
@@ -34,32 +34,27 @@ export default function Auth() {
         throw new Error('Supabase client is not initialized. Please check your environment variables.')
       }
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        })
+        const { error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) throw error
         setDialogMsg('Login successful! Redirecting...')
         setOpen(true)
-        setTimeout(() => window.location.href = '/sports', 1200)
+        setTimeout(() => (window.location.href = '/sports'), 1200)
       } else {
         const productionUrl = 'https://whoznexxsports.team'
-        const redirectUrl = process.env.NODE_ENV === 'production' 
-          ? `${productionUrl}/auth/callback?next=/auth`
-          : `${window.location.origin}/auth/callback?next=/auth`
+        const redirectUrl =
+          process.env.NODE_ENV === 'production'
+            ? `${productionUrl}/auth/callback?next=/auth`
+            : `${window.location.origin}/auth/callback?next=/auth`
         const { error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             emailRedirectTo: redirectUrl,
-            data: {
-              name,
-              phone,
-            },
+            data: { name, phone },
           },
         })
         if (error) throw error
-        setDialogMsg('Sign up successful! Check your email for verification. After confirming, you will be redirected to login.')
+        setDialogMsg('Sign up successful! Check your email for verification. After confirming, you can login.')
         setOpen(true)
       }
     } catch (error: any) {
@@ -76,12 +71,11 @@ export default function Auth() {
     try {
       if (!supabase) throw new Error('Supabase client is not initialized.')
       const productionUrl = 'https://whoznexxsports.team'
-      const redirectUrl = process.env.NODE_ENV === 'production'
-        ? `${productionUrl}/auth/callback?next=/auth`
-        : `${window.location.origin}/auth/callback?next=/auth`
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: redirectUrl,
-      })
+      const redirectUrl =
+        process.env.NODE_ENV === 'production'
+          ? `${productionUrl}/auth/callback?next=/auth`
+          : `${window.location.origin}/auth/callback?next=/auth`
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, { redirectTo: redirectUrl })
       if (error) throw error
       setDialogMsg('Password reset email sent! Check your inbox.')
       setOpen(true)
@@ -94,167 +88,135 @@ export default function Auth() {
     }
   }
 
+  const inputClass = 'bg-black/60 border-gray-700 text-white placeholder:text-gray-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/50 rounded-lg'
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-red-500 animate-fade-in">
-      <Card className="relative max-w-md w-full bg-black/80 border-red-700 shadow-2xl rounded-xl overflow-hidden">
-        <CardContent className="relative z-10 p-8 flex flex-col gap-6">
-          <div className="flex flex-col items-center gap-2">
-            <span className="bg-black/60 rounded-full p-3 mb-2 animate-bounce shadow-lg">
-              {showReset ? (
-                <KeyRound className="w-10 h-10 text-red-500 drop-shadow-lg" />
-              ) : isLogin ? (
-                <LogIn className="w-10 h-10 text-red-500 drop-shadow-lg" />
-              ) : (
-                <UserPlus className="w-10 h-10 text-red-500 drop-shadow-lg" />
-              )}
-            </span>
-            <h1 className="text-3xl font-bold text-center text-white mb-2 animate-fade-in">
-              {showReset ? 'Reset Password' : isLogin ? 'Login' : 'Sign Up'}
+    <div className="min-h-screen flex items-center justify-center bg-black text-white px-4 py-12">
+      {/* Background glow */}
+      <div className="fixed inset-0 z-0 opacity-20"
+        style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(200,0,0,0.3), transparent 60%)' }}
+      />
+
+      <motion.div
+        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6 }}
+        className="relative z-10 max-w-md w-full"
+      >
+        <div className="glass-card rounded-2xl p-8 animate-border-glow">
+          {/* Header */}
+          <div className="flex flex-col items-center gap-3 mb-6">
+            <img
+              src="/logo88.png"
+              alt="WNS"
+              className="h-16 w-auto"
+              style={{ filter: 'drop-shadow(0 0 16px rgba(255,0,0,0.6))' }}
+            />
+            <h1 className="font-brand text-2xl md:text-3xl font-bold text-luxury">
+              {showReset ? 'Reset Password' : isLogin ? 'Welcome Back' : 'Join the Team'}
             </h1>
+            <p className="text-gray-400 text-sm text-center">
+              {showReset
+                ? 'Enter your email to receive a reset link'
+                : isLogin
+                ? 'Sign in to access sports registration'
+                : 'Create your account and register your athletes'}
+            </p>
+            <span className="badge-premium text-xs">Feb 25, 2026 Event</span>
           </div>
+
           {!showReset ? (
             <>
-              <form onSubmit={handleAuth} className="space-y-4 animate-fade-in">
+              <form onSubmit={handleAuth} className="space-y-4">
                 {!isLogin && (
                   <>
                     <div>
-                      <Label htmlFor="name" className="text-white">
-                        Name
-                      </Label>
-                      <Input
-                        id="name"
-                        type="text"
-                        placeholder="Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                        className="bg-black/60 border-red-700 text-white placeholder:text-red-300 focus:ring-2 focus:ring-red-500"
-                      />
+                      <Label htmlFor="name" className="text-gray-300 text-sm font-semibold">Full Name *</Label>
+                      <Input id="name" type="text" placeholder="Your full name" value={name} onChange={(e) => setName(e.target.value)} required className={inputClass} />
                     </div>
                     <div>
-                      <Label htmlFor="phone" className="text-white">
-                        Phone
-                      </Label>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        placeholder="Phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="bg-black/60 border-red-700 text-white placeholder:text-red-300 focus:ring-2 focus:ring-red-500"
-                      />
+                      <Label htmlFor="phone" className="text-gray-300 text-sm font-semibold">Phone Number *</Label>
+                      <Input id="phone" type="tel" placeholder="(555) 123-4567" value={phone} onChange={(e) => setPhone(e.target.value)} required className={inputClass} />
                     </div>
                   </>
                 )}
                 <div>
-                  <Label htmlFor="email" className="text-white">
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="bg-black/60 border-red-700 text-white placeholder:text-red-300 focus:ring-2 focus:ring-red-500"
-                  />
+                  <Label htmlFor="email" className="text-gray-300 text-sm font-semibold">Email *</Label>
+                  <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required className={inputClass} />
                 </div>
                 <div>
-                  <Label htmlFor="password" className="text-white">
-                    Password
-                  </Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="bg-black/60 border-red-700 text-white placeholder:text-red-300 focus:ring-2 focus:ring-red-500"
-                  />
+                  <Label htmlFor="password" className="text-gray-300 text-sm font-semibold">Password *</Label>
+                  <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required className={inputClass} />
                 </div>
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg text-lg shadow-md transition-all duration-200"
+                  className="w-full bg-red-600 hover:bg-red-500 text-white font-brand font-bold py-3 px-4 rounded-xl text-lg shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:shadow-[0_0_40px_rgba(255,0,0,0.4)] transition-all duration-300"
                 >
-                  {loading
-                    ? isLogin
-                      ? 'Logging in...'
-                      : 'Signing up...'
-                    : isLogin
-                    ? 'Login'
-                    : 'Sign Up'}
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      {isLogin ? 'Signing in...' : 'Creating account...'}
+                    </span>
+                  ) : isLogin ? (
+                    <span className="flex items-center justify-center gap-2"><LogIn className="w-5 h-5" /> Sign In</span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-2"><UserPlus className="w-5 h-5" /> Create Account</span>
+                  )}
                 </Button>
               </form>
-              <div className="flex flex-col gap-2 mt-2">
+
+              <div className="flex flex-col gap-2 mt-4">
                 <Button
                   variant="outline"
                   onClick={() => setIsLogin(!isLogin)}
-                  className="w-full border-red-600 text-red-600 hover:bg-red-900 hover:text-white font-bold py-2 px-4 rounded-lg text-md shadow-sm animate-fade-in"
+                  className="w-full border-gray-700 text-gray-300 hover:bg-red-900/20 hover:text-white hover:border-red-600/50 font-semibold py-2 rounded-xl transition-all"
                 >
-                  {isLogin
-                    ? 'Need an account? Sign Up'
-                    : 'Already have an account? Login'}
+                  {isLogin ? 'Need an account? Sign Up' : 'Already have an account? Sign In'}
                 </Button>
-                <Button
-                  variant="link"
+                <button
                   onClick={() => setShowReset(true)}
-                  className="w-full text-xs text-red-400 hover:text-red-200"
+                  className="text-xs text-gray-500 hover:text-red-400 transition-colors"
                   type="button"
                 >
                   Forgot password?
-                </Button>
+                </button>
               </div>
             </>
           ) : (
-            <form onSubmit={handleResetPassword} className="space-y-4 animate-fade-in">
+            <form onSubmit={handleResetPassword} className="space-y-4">
               <div>
-                <Label htmlFor="reset-email" className="text-white">
-                  Enter your email
-                </Label>
-                <Input
-                  id="reset-email"
-                  type="email"
-                  placeholder="Email"
-                  value={resetEmail}
-                  onChange={(e) => setResetEmail(e.target.value)}
-                  required
-                  className="bg-black/60 border-red-700 text-white placeholder:text-red-300 focus:ring-2 focus:ring-red-500"
-                />
+                <Label htmlFor="reset-email" className="text-gray-300 text-sm font-semibold">Email Address</Label>
+                <Input id="reset-email" type="email" placeholder="you@example.com" value={resetEmail} onChange={(e) => setResetEmail(e.target.value)} required className={inputClass} />
               </div>
               <Button
                 type="submit"
                 disabled={resetLoading}
-                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg text-lg shadow-md transition-all duration-200"
+                className="w-full bg-red-600 hover:bg-red-500 text-white font-brand font-bold py-3 rounded-xl text-lg shadow-[0_0_20px_rgba(255,0,0,0.3)] transition-all"
               >
                 {resetLoading ? 'Sending...' : 'Send Reset Email'}
               </Button>
               <Button
                 variant="outline"
                 onClick={() => setShowReset(false)}
-                className="w-full border-red-600 text-red-600 hover:bg-red-900 hover:text-white font-bold py-2 px-4 rounded-lg text-md shadow-sm animate-fade-in"
+                className="w-full border-gray-700 text-gray-300 hover:bg-red-900/20 hover:text-white font-semibold py-2 rounded-xl"
                 type="button"
               >
-                Back to Login
+                ← Back to Login
               </Button>
             </form>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </motion.div>
+
+      {/* Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="bg-black/90 border-red-700 text-white">
+        <DialogContent className="bg-black/95 border-red-700/50 text-white backdrop-blur-xl">
           <DialogTitle className="sr-only">Authentication Status</DialogTitle>
-          <div className="flex flex-col items-center gap-4">
-            <span className="bg-black/60 rounded-full p-3 mb-2 animate-bounce shadow-lg">
-              <User className="w-10 h-10 text-red-500 drop-shadow-lg" />
-            </span>
-            <p className="text-lg text-center">{dialogMsg}</p>
-            <Button
-              onClick={() => setOpen(false)}
-              className="bg-red-600 hover:bg-red-700 w-full"
-            >
+          <div className="flex flex-col items-center gap-4 py-2">
+            <User className="w-10 h-10 text-red-500" />
+            <p className="text-lg text-center text-gray-200">{dialogMsg}</p>
+            <Button onClick={() => setOpen(false)} className="bg-red-600 hover:bg-red-500 w-full font-brand rounded-xl">
               OK
             </Button>
           </div>

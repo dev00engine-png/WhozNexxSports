@@ -6,75 +6,96 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Card, CardContent } from '@/components/ui/card';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
 const sports = [
   {
     name: 'football',
+    label: 'American Football',
+    tagline: 'Strategy in Motion',
     image: '/football1.jpg',
-    intro: (
-      <>
-        <span className="text-gradient bg-gradient-to-r from-red-500 via-yellow-500 to-red-700 bg-clip-text text-transparent font-extrabold text-2xl drop-shadow-lg">American Football: Strategy in Motion</span>
-        <p className="mt-2 text-white/90 text-sm">
-          Football is a game of discipline, specialized roles, and brotherhood. We prioritize safety and technical fundamentals to build a "Smart Player" profile.<br/>
-          <span className="font-bold text-red-400">Coaching Technique:</span> "Positional Mastery" sessions for unique mechanics.<br/>
-          <span className="font-bold text-red-400">Training:</span> Explosive Power, core stability, resistance bands, and sled-drills.<br/>
-          <span className="font-bold text-red-400">Guidance:</span> Emotional Intelligence—staying calm under pressure and respecting all.
-        </p>
-      </>
-    ),
-    effect: 'backdrop-blur-md',
+    image2: '/football2.jpg',
+    color: 'red',
+    gradient: 'from-red-600 via-red-800 to-red-950',
+    accent: 'text-red-400',
+    borderColor: 'border-red-600/40',
+    glowColor: 'rgba(255,50,50,0.3)',
+    badge: '🏈',
+    intro: 'Football is a game of discipline, specialized roles, and brotherhood. We prioritize safety and technical fundamentals to build a "Smart Player" profile.',
+    details: [
+      { label: 'Coaching', text: '"Positional Mastery" sessions for unique mechanics at every position.' },
+      { label: 'Training', text: 'Explosive Power, core stability, resistance bands, and sled-drills.' },
+      { label: 'Guidance', text: 'Emotional Intelligence—staying calm under pressure and respecting all.' },
+    ],
   },
   {
     name: 'baseball',
+    label: 'Baseball / Softball',
+    tagline: 'The Game of Inches',
     image: '/baseball1.jpg',
-    intro: (
-      <>
-        <span className="text-gradient bg-gradient-to-r from-yellow-400 via-red-500 to-yellow-700 bg-clip-text text-transparent font-extrabold text-2xl drop-shadow-lg">Baseball/Softball: The Game of Inches</span>
-        <p className="mt-2 text-white/90 text-sm">
-          Baseball and Softball are sports of extreme focus and mental toughness. We keep the energy high through constant movement.<br/>
-          <span className="font-bold text-yellow-300">Coaching Technique:</span> Video Analysis Feedback for swing/pitching mechanics.<br/>
-          <span className="font-bold text-yellow-300">Training:</span> Rotational Strength, reaction time, vision-tracking drills.<br/>
-          <span className="font-bold text-yellow-300">Mentorship:</span> Resilience Coaching—shake off a strikeout and stay ready for the next play.
-        </p>
-      </>
-    ),
-    effect: 'backdrop-blur-lg',
+    image2: '/baseball2.jpg',
+    color: 'yellow',
+    gradient: 'from-yellow-600 via-yellow-800 to-yellow-950',
+    accent: 'text-yellow-400',
+    borderColor: 'border-yellow-600/40',
+    glowColor: 'rgba(255,200,50,0.3)',
+    badge: '⚾',
+    intro: 'Baseball and Softball are sports of extreme focus and mental toughness. We keep the energy high through constant movement and precision.',
+    details: [
+      { label: 'Coaching', text: 'Video Analysis Feedback for swing/pitching mechanics.' },
+      { label: 'Training', text: 'Rotational Strength, reaction time, vision-tracking drills.' },
+      { label: 'Mentorship', text: 'Resilience Coaching—shake off a strikeout and stay ready for the next play.' },
+    ],
   },
   {
     name: 'soccer',
+    label: 'Soccer',
+    tagline: 'The Global Pulse',
     image: '/soccer1.jpg',
-    intro: (
-      <>
-        <span className="text-gradient bg-gradient-to-r from-green-400 via-blue-500 to-green-700 bg-clip-text text-transparent font-extrabold text-2xl drop-shadow-lg">Soccer: The Global Pulse</span>
-        <p className="mt-2 text-white/90 text-sm">
-          Soccer is the ultimate teacher of endurance and "off-ball" intelligence. We focus on the "Beautiful Game" by ensuring every student feels the ball at their feet.<br/>
-          <span className="font-bold text-green-300">Coaching Technique:</span> The "Rondo" method for quick reflexes and passing accuracy.<br/>
-          <span className="font-bold text-green-300">Training:</span> Agility, Plyometrics, and "soft feet" for ball control.<br/>
-          <span className="font-bold text-green-300">Mentorship:</span> Tactical Patience—understanding off-ball movement.
-        </p>
-      </>
-    ),
-    effect: 'backdrop-blur-md',
+    image2: '/soccer2.jpg',
+    color: 'green',
+    gradient: 'from-green-600 via-green-800 to-green-950',
+    accent: 'text-green-400',
+    borderColor: 'border-green-600/40',
+    glowColor: 'rgba(50,200,100,0.3)',
+    badge: '⚽',
+    intro: 'Soccer is the ultimate teacher of endurance and "off-ball" intelligence. We focus on the "Beautiful Game" by ensuring every player feels the ball at their feet.',
+    details: [
+      { label: 'Coaching', text: 'The "Rondo" method for quick reflexes and passing accuracy.' },
+      { label: 'Training', text: 'Agility, Plyometrics, and "soft feet" for ball control.' },
+      { label: 'Mentorship', text: 'Tactical Patience—understanding off-ball movement and spacing.' },
+    ],
   },
   {
     name: 'basketball',
+    label: 'Basketball',
+    tagline: 'The Art of the Flow',
     image: '/basketball1.jpg',
-    intro: (
-      <>
-        <span className="text-gradient bg-gradient-to-r from-orange-400 via-red-500 to-orange-700 bg-clip-text text-transparent font-extrabold text-2xl drop-shadow-lg">Basketball: The Art of the Flow</span>
-        <p className="mt-2 text-white/90 text-sm">
-          Basketball is more than just shooting hoops; it’s about rhythm, spatial awareness, and split-second decisions.<br/>
-          <span className="font-bold text-orange-300">Coaching Technique:</span> "Skill-Station Rotation" for hand-eye coordination and high-intensity drills.<br/>
-          <span className="font-bold text-orange-300">Training:</span> Kinetic Chain movements for power transfer.<br/>
-          <span className="font-bold text-orange-300">Mentorship:</span> Coaches as "Floor Generals"—reading the court and leading teammates.
-        </p>
-      </>
-    ),
-    effect: 'backdrop-blur-lg',
+    image2: '/basketball2.jpg',
+    color: 'orange',
+    gradient: 'from-orange-600 via-orange-800 to-orange-950',
+    accent: 'text-orange-400',
+    borderColor: 'border-orange-600/40',
+    glowColor: 'rgba(255,150,50,0.3)',
+    badge: '🏀',
+    intro: 'Basketball is more than shooting hoops; it\'s about rhythm, spatial awareness, and split-second decisions that define greatness.',
+    details: [
+      { label: 'Coaching', text: '"Skill-Station Rotation" for hand-eye coordination and high-intensity drills.' },
+      { label: 'Training', text: 'Kinetic Chain movements for explosive power transfer.' },
+      { label: 'Mentorship', text: 'Coaches as "Floor Generals"—reading the court and leading teammates.' },
+    ],
   },
 ];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.12, duration: 0.6, ease: 'easeOut' },
+  }),
+};
 
 export default function Sports() {
   const [user, setUser] = useState<any>(null);
@@ -86,9 +107,7 @@ export default function Sports() {
         router.push('/auth');
         return;
       }
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         router.push('/auth');
       } else {
@@ -98,33 +117,119 @@ export default function Sports() {
     getUser();
   }, [router]);
 
-  if (!user) return <div>Loading...</div>;
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-gray-400 font-brand">Loading your arena...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-black text-red-500 py-12">
-      <div className="max-w-5xl mx-auto px-4">
-        <h1 className="text-4xl font-extrabold text-center mb-8 text-gradient bg-gradient-to-r from-red-500 via-yellow-500 to-red-700 bg-clip-text text-transparent drop-shadow-lg">Select a Sport</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {sports.map((sport) => (
-            <Card key={sport.name} className={`relative overflow-hidden bg-black/80 border-2 border-red-700 shadow-xl ${sport.effect}`}>
-              <div className="absolute inset-0 z-0">
+    <div className="min-h-screen bg-black text-white">
+      {/* Header */}
+      <div className="relative py-16 px-4 text-center overflow-hidden">
+        <div className="absolute inset-0 opacity-10"
+          style={{ background: 'radial-gradient(ellipse at center, rgba(200,0,0,0.4), transparent 70%)' }}
+        />
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <img
+            src="/logo88.png"
+            alt=""
+            className="h-14 w-auto mx-auto mb-4"
+            style={{ filter: 'drop-shadow(0 0 12px rgba(255,0,0,0.6))' }}
+          />
+          <h1 className="font-brand text-4xl md:text-5xl font-bold text-luxury mb-2">Select Your Sport</h1>
+          <p className="text-gray-400 text-lg">Choose your arena. Begin your journey. Feb 25, 2026.</p>
+          <div className="flex justify-center gap-2 mt-4">
+            <span className="badge-premium">🏟️ All Skill Levels</span>
+            <span className="badge-premium">⭐ Professional Coaching</span>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Sports Grid */}
+      <div className="max-w-7xl mx-auto px-4 pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {sports.map((sport, i) => (
+            <motion.div
+              key={sport.name}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={fadeUp}
+              custom={i}
+              className={`relative rounded-3xl overflow-hidden ${sport.borderColor} border-2 group card-3d`}
+              style={{
+                background: 'linear-gradient(135deg, rgba(10,0,0,0.95), rgba(20,0,0,0.85))',
+              }}
+            >
+              {/* Sport Image — 3D Pop-out */}
+              <div className="relative h-64 overflow-hidden">
                 <img
                   src={sport.image}
-                  alt={sport.name}
-                  className="w-full h-full object-cover opacity-40 blur-md scale-110"
+                  alt={sport.label}
+                  className="w-full h-full object-cover sport-image-3d transition-all duration-700 group-hover:scale-110"
+                  style={{
+                    filter: 'brightness(0.8) saturate(1.3)',
+                  }}
                 />
-              </div>
-              <CardContent className="relative z-10 flex flex-col h-full justify-between p-6">
-                <div>
-                  {sport.intro}
+                <div className={`absolute inset-0 bg-gradient-to-t ${sport.gradient} opacity-60`} />
+
+                {/* Floating badge */}
+                <div className="absolute top-4 left-4 z-10">
+                  <span className="badge-sport text-base">{sport.badge} {sport.label}</span>
                 </div>
-                <Link href={`/register?sport=${sport.name}`} className="mt-6 block">
-                  <Button className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg text-lg shadow-md backdrop-blur-xl">
-                    Sign Up for {sport.name.charAt(0).toUpperCase() + sport.name.slice(1)}
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+
+                {/* 3D Pop-out Title */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                  <h2 className="font-brand text-3xl md:text-4xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]"
+                    style={{ textShadow: `0 0 30px ${sport.glowColor}` }}
+                  >
+                    {sport.tagline}
+                  </h2>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 space-y-4">
+                <p className="text-gray-300 text-sm leading-relaxed">{sport.intro}</p>
+
+                {/* Detail pills */}
+                <div className="space-y-3">
+                  {sport.details.map((d) => (
+                    <div key={d.label} className="flex gap-3 items-start">
+                      <span className={`${sport.accent} font-brand font-bold text-sm whitespace-nowrap mt-0.5`}>
+                        {d.label}:
+                      </span>
+                      <span className="text-gray-400 text-sm leading-relaxed">{d.text}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Second image thumbnail */}
+                <div className="flex items-center gap-4 pt-2">
+                  <div className="relative w-20 h-20 rounded-xl overflow-hidden sport-image-3d flex-shrink-0"
+                    style={{ boxShadow: `0 8px 30px ${sport.glowColor}` }}
+                  >
+                    <img src={sport.image2} alt="" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex-1">
+                    <Link href={`/register?sport=${sport.name}`}>
+                      <Button
+                        className={`w-full bg-gradient-to-r ${sport.gradient} hover:brightness-125 text-white font-brand font-bold py-3 px-6 rounded-xl text-lg shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl`}
+                        style={{ boxShadow: `0 4px 25px ${sport.glowColor}` }}
+                      >
+                        Sign Up for {sport.label} →
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>

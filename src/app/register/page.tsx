@@ -3,109 +3,71 @@
 export const dynamic = 'force-dynamic'
 
 import { useState, useEffect, Suspense } from 'react';
-import React from "react";
+import React from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Card, CardContent } from '@/components/ui/card';
+import { motion } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Goal, Medal, Trophy, Dribbble } from 'lucide-react';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
-const sportDetails: Record<string, { icon: any; image: string; intro: React.ReactNode }> = {
+const sportMeta: Record<string, {
+  label: string; badge: string; image: string;
+  gradient: string; accent: string; glowColor: string;
+}> = {
   football: {
-    icon: Goal,
-    image: '/football2.jpg',
-    intro: (
-      <>
-        <span className="text-gradient bg-gradient-to-r from-red-500 via-yellow-500 to-red-700 bg-clip-text text-transparent font-extrabold text-2xl drop-shadow-lg animate-fade-in">American Football: Strategy in Motion</span>
-        <p className="mt-2 text-white/90 text-sm animate-fade-in">
-          Football is a game of discipline, specialized roles, and brotherhood. We prioritize safety and technical fundamentals to build a "Smart Player" profile.<br/>
-          <span className="font-bold text-red-400">Coaching Technique:</span> "Positional Mastery" sessions for unique mechanics.<br/>
-          <span className="font-bold text-red-400">Training:</span> Explosive Power, core stability, resistance bands, and sled-drills.<br/>
-          <span className="font-bold text-red-400">Guidance:</span> Emotional Intelligence—staying calm under pressure and respecting all.
-        </p>
-      </>
-    ),
+    label: 'American Football', badge: '🏈', image: '/football2.jpg',
+    gradient: 'from-red-600 via-red-800 to-red-950', accent: 'text-red-400', glowColor: 'rgba(255,50,50,0.4)',
   },
   baseball: {
-    icon: Medal,
-    image: '/baseball2.jpg',
-    intro: (
-      <>
-        <span className="text-gradient bg-gradient-to-r from-yellow-400 via-red-500 to-yellow-700 bg-clip-text text-transparent font-extrabold text-2xl drop-shadow-lg animate-fade-in">Baseball/Softball: The Game of Inches</span>
-        <p className="mt-2 text-white/90 text-sm animate-fade-in">
-          Baseball and Softball are sports of extreme focus and mental toughness. We keep the energy high through constant movement.<br/>
-          <span className="font-bold text-yellow-300">Coaching Technique:</span> Video Analysis Feedback for swing/pitching mechanics.<br/>
-          <span className="font-bold text-yellow-300">Training:</span> Rotational Strength, reaction time, vision-tracking drills.<br/>
-          <span className="font-bold text-yellow-300">Mentorship:</span> Resilience Coaching—shake off a strikeout and stay ready for the next play.
-        </p>
-      </>
-    ),
+    label: 'Baseball / Softball', badge: '⚾', image: '/baseball2.jpg',
+    gradient: 'from-yellow-600 via-yellow-800 to-yellow-950', accent: 'text-yellow-400', glowColor: 'rgba(255,200,50,0.4)',
   },
   soccer: {
-    icon: Trophy,
-    image: '/soccer1.jpg',
-    intro: (
-      <>
-        <span className="text-gradient bg-gradient-to-r from-green-400 via-blue-500 to-green-700 bg-clip-text text-transparent font-extrabold text-2xl drop-shadow-lg animate-fade-in">Soccer: The Global Pulse</span>
-        <p className="mt-2 text-white/90 text-sm animate-fade-in">
-          Soccer is the ultimate teacher of endurance and "off-ball" intelligence. We focus on the "Beautiful Game" by ensuring every student feels the ball at their feet.<br/>
-          <span className="font-bold text-green-300">Coaching Technique:</span> The "Rondo" method for quick reflexes and passing accuracy.<br/>
-          <span className="font-bold text-green-300">Training:</span> Agility, Plyometrics, and "soft feet" for ball control.<br/>
-          <span className="font-bold text-green-300">Mentorship:</span> Tactical Patience—understanding off-ball movement.
-        </p>
-      </>
-    ),
+    label: 'Soccer', badge: '⚽', image: '/soccer2.jpg',
+    gradient: 'from-green-600 via-green-800 to-green-950', accent: 'text-green-400', glowColor: 'rgba(50,200,100,0.4)',
   },
   basketball: {
-    icon: Dribbble,
-    image: '/basketball2.jpg',
-    intro: (
-      <>
-        <span className="text-gradient bg-gradient-to-r from-orange-400 via-red-500 to-orange-700 bg-clip-text text-transparent font-extrabold text-2xl drop-shadow-lg animate-fade-in">Basketball: The Art of the Flow</span>
-        <p className="mt-2 text-white/90 text-sm animate-fade-in">
-          Basketball is more than just shooting hoops; it’s about rhythm, spatial awareness, and split-second decisions.<br/>
-          <span className="font-bold text-orange-300">Coaching Technique:</span> "Skill-Station Rotation" for hand-eye coordination and high-intensity drills.<br/>
-          <span className="font-bold text-orange-300">Training:</span> Kinetic Chain movements for power transfer.<br/>
-          <span className="font-bold text-orange-300">Mentorship:</span> Coaches as "Floor Generals"—reading the court and leading teammates.
-        </p>
-      </>
-    ),
+    label: 'Basketball', badge: '🏀', image: '/basketball2.jpg',
+    gradient: 'from-orange-600 via-orange-800 to-orange-950', accent: 'text-orange-400', glowColor: 'rgba(255,150,50,0.4)',
   },
 };
 
 function RegisterContent() {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const sport = searchParams.get('sport') || 'football';
-  const details = sportDetails[sport] || sportDetails.football;
+  const meta = sportMeta[sport] || sportMeta.football;
+
+  // Form fields
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
+  const [school, setSchool] = useState('');
+  const [grade, setGrade] = useState('');
+  const [experienceLevel, setExperienceLevel] = useState('beginner');
+  const [parentPhone, setParentPhone] = useState('');
+  const [emergencyName, setEmergencyName] = useState('');
+  const [emergencyPhone, setEmergencyPhone] = useState('');
+  const [shirtSize, setShirtSize] = useState('');
+  const [medicalNotes, setMedicalNotes] = useState('');
+  const [specialRequests, setSpecialRequests] = useState('');
 
   useEffect(() => {
     const getUser = async () => {
-      if (!supabase) {
-        router.push('/auth');
-        return;
-      }
+      if (!supabase) { router.push('/auth'); return; }
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        router.push('/auth');
-        return;
-      }
+      if (!user) { router.push('/auth'); return; }
       setUser(user);
       const { data: profileData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
+        .from('profiles').select('*').eq('user_id', user.id).single();
       setProfile(profileData);
+      if (profileData?.phone) setParentPhone(profileData.phone);
     };
     getUser();
   }, [router]);
@@ -115,15 +77,27 @@ function RegisterContent() {
     if (!profile || !sport || !supabase) return;
     setLoading(true);
     try {
-      const { error } = await (supabase as any)
-        .from('kids')
-        .insert({
-          parent_id: profile.id,
-          name,
-          age: parseInt(age),
-          sport,
-        });
+      const { error } = await (supabase as any).from('kids').insert({
+        parent_id: profile.id,
+        name,
+        age: parseInt(age),
+        sport,
+        gender: gender || null,
+        school: school || null,
+        grade: grade || null,
+        experience_level: experienceLevel || null,
+        parent_phone: parentPhone || null,
+        emergency_contact_name: emergencyName || null,
+        emergency_contact_phone: emergencyPhone || null,
+        shirt_size: shirtSize || null,
+        medical_notes: medicalNotes || null,
+        special_requests: specialRequests || null,
+      });
       if (error) throw error;
+      // Also update parent phone in profile if provided
+      if (parentPhone && supabase) {
+        await supabase.from('profiles').update({ phone: parentPhone }).eq('id', profile.id);
+      }
       setOpen(true);
     } catch (error: any) {
       alert(error.message);
@@ -132,71 +106,210 @@ function RegisterContent() {
     }
   };
 
-  if (!user || !profile) return <div>Loading...</div>;
+  if (!user || !profile) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-gray-400 font-brand">Preparing registration...</p>
+        </div>
+      </div>
+    );
+  }
 
-  const Icon = details.icon;
+  const inputClass = 'bg-black/60 border-gray-700 text-white placeholder:text-gray-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/50 rounded-lg';
+  const selectClass = 'bg-black/60 border border-gray-700 text-white rounded-lg px-3 py-2 w-full focus:border-red-500 focus:ring-1 focus:ring-red-500/50 focus:outline-none';
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-red-500 py-12 animate-fade-in">
-      <Card className="relative max-w-lg w-full bg-black/80 border-red-700 shadow-2xl rounded-xl overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img
-            src={details.image}
-            alt={sport}
-            className="w-full h-full object-cover opacity-40 blur-lg scale-110"
-          />
+    <div className="min-h-screen bg-black text-white pb-20">
+      {/* Sport Header with 3D image */}
+      <div className="relative h-64 md:h-80 overflow-hidden">
+        <img
+          src={meta.image}
+          alt={meta.label}
+          className="w-full h-full object-cover sport-image-3d"
+          style={{ filter: 'brightness(0.6) saturate(1.4)' }}
+        />
+        <div className={`absolute inset-0 bg-gradient-to-t ${meta.gradient} opacity-70`} />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div className="flex items-center gap-3 mb-2">
+              <img src="/logo88.png" alt="" className="h-8 w-auto" style={{ filter: 'drop-shadow(0 0 8px rgba(255,0,0,0.5))' }} />
+              <span className="badge-sport text-sm">{meta.badge} {meta.label}</span>
+            </div>
+            <h1 className="font-brand text-3xl md:text-4xl font-black text-white"
+              style={{ textShadow: `0 0 30px ${meta.glowColor}` }}
+            >
+              Register for {meta.label}
+            </h1>
+            <p className="text-gray-300 text-sm mt-1">February 25, 2026 · All Skill Levels Welcome</p>
+          </motion.div>
         </div>
-        <CardContent className="relative z-10 p-8 flex flex-col gap-6">
-          <div className="flex flex-col items-center gap-2">
-            <span className="bg-black/60 rounded-full p-3 mb-2 animate-bounce shadow-lg">
-              <Icon className="w-10 h-10 text-red-500 drop-shadow-lg" />
-            </span>
-            {details.intro}
-          </div>
-          <form onSubmit={handleRegister} className="space-y-4 mt-4 animate-fade-in">
+      </div>
+
+      {/* Registration Form */}
+      <div className="max-w-2xl mx-auto px-4 -mt-8 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="glass-card rounded-2xl p-6 md:p-8 animate-border-glow"
+        >
+          <h2 className="font-brand text-xl font-bold text-white mb-1">Athlete Registration</h2>
+          <p className="text-gray-400 text-sm mb-6">Complete all fields below to secure your spot.</p>
+
+          <form onSubmit={handleRegister} className="space-y-5">
+            {/* Row: Name + Age */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="kid-name" className="text-gray-300 text-sm font-semibold">Child&apos;s Full Name *</Label>
+                <Input id="kid-name" type="text" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} required className={inputClass} />
+              </div>
+              <div>
+                <Label htmlFor="kid-age" className="text-gray-300 text-sm font-semibold">Age *</Label>
+                <Input id="kid-age" type="number" placeholder="Age" value={age} onChange={(e) => setAge(e.target.value)} required min="3" max="18" className={inputClass} />
+              </div>
+            </div>
+
+            {/* Row: Gender + Grade */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="gender" className="text-gray-300 text-sm font-semibold">Gender</Label>
+                <select id="gender" value={gender} onChange={(e) => setGender(e.target.value)} className={selectClass}>
+                  <option value="">Select...</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="grade" className="text-gray-300 text-sm font-semibold">Grade</Label>
+                <Input id="grade" type="text" placeholder="e.g. 5th" value={grade} onChange={(e) => setGrade(e.target.value)} className={inputClass} />
+              </div>
+            </div>
+
+            {/* Row: School + Experience */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="school" className="text-gray-300 text-sm font-semibold">School</Label>
+                <Input id="school" type="text" placeholder="School name" value={school} onChange={(e) => setSchool(e.target.value)} className={inputClass} />
+              </div>
+              <div>
+                <Label htmlFor="experience" className="text-gray-300 text-sm font-semibold">Experience Level</Label>
+                <select id="experience" value={experienceLevel} onChange={(e) => setExperienceLevel(e.target.value)} className={selectClass}>
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Shirt Size */}
             <div>
-              <Label htmlFor="kid-name" className="text-white">Kid's Name</Label>
-              <Input
-                id="kid-name"
-                type="text"
-                placeholder="Enter your kid's name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="bg-black/60 border-red-700 text-white placeholder:text-red-300 focus:ring-2 focus:ring-red-500"
+              <Label htmlFor="shirt" className="text-gray-300 text-sm font-semibold">Shirt Size</Label>
+              <select id="shirt" value={shirtSize} onChange={(e) => setShirtSize(e.target.value)} className={selectClass}>
+                <option value="">Select...</option>
+                <option value="YS">Youth Small</option>
+                <option value="YM">Youth Medium</option>
+                <option value="YL">Youth Large</option>
+                <option value="AS">Adult Small</option>
+                <option value="AM">Adult Medium</option>
+                <option value="AL">Adult Large</option>
+                <option value="AXL">Adult XL</option>
+              </select>
+            </div>
+
+            {/* Separator */}
+            <div className="border-t border-red-900/30 pt-4">
+              <h3 className="font-brand text-lg font-bold text-red-400 mb-3">📞 Contact Information</h3>
+            </div>
+
+            {/* Parent Phone */}
+            <div>
+              <Label htmlFor="parent-phone" className="text-gray-300 text-sm font-semibold">Parent/Guardian Phone *</Label>
+              <Input id="parent-phone" type="tel" placeholder="(555) 123-4567" value={parentPhone} onChange={(e) => setParentPhone(e.target.value)} required className={inputClass} />
+            </div>
+
+            {/* Emergency Contact */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="emergency-name" className="text-gray-300 text-sm font-semibold">Emergency Contact Name</Label>
+                <Input id="emergency-name" type="text" placeholder="Contact name" value={emergencyName} onChange={(e) => setEmergencyName(e.target.value)} className={inputClass} />
+              </div>
+              <div>
+                <Label htmlFor="emergency-phone" className="text-gray-300 text-sm font-semibold">Emergency Contact Phone</Label>
+                <Input id="emergency-phone" type="tel" placeholder="(555) 987-6543" value={emergencyPhone} onChange={(e) => setEmergencyPhone(e.target.value)} className={inputClass} />
+              </div>
+            </div>
+
+            {/* Separator */}
+            <div className="border-t border-red-900/30 pt-4">
+              <h3 className="font-brand text-lg font-bold text-red-400 mb-3">📋 Additional Information</h3>
+            </div>
+
+            {/* Medical Notes */}
+            <div>
+              <Label htmlFor="medical" className="text-gray-300 text-sm font-semibold">Medical Notes / Allergies</Label>
+              <textarea
+                id="medical"
+                placeholder="Any medical conditions, allergies, or medications..."
+                value={medicalNotes}
+                onChange={(e) => setMedicalNotes(e.target.value)}
+                className={`${selectClass} min-h-[80px] resize-y`}
               />
             </div>
+
+            {/* Special Requests */}
             <div>
-              <Label htmlFor="kid-age" className="text-white">Age</Label>
-              <Input
-                id="kid-age"
-                type="number"
-                placeholder="Age"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-                required
-                className="bg-black/60 border-red-700 text-white placeholder:text-red-300 focus:ring-2 focus:ring-red-500"
+              <Label htmlFor="requests" className="text-gray-300 text-sm font-semibold">Special Requests</Label>
+              <textarea
+                id="requests"
+                placeholder="Any special requests or notes for coaches..."
+                value={specialRequests}
+                onChange={(e) => setSpecialRequests(e.target.value)}
+                className={`${selectClass} min-h-[80px] resize-y`}
               />
             </div>
+
+            {/* Submit */}
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg text-lg shadow-md transition-all duration-200"
+              className={`w-full bg-gradient-to-r ${meta.gradient} hover:brightness-125 text-white font-brand font-bold py-4 px-6 rounded-xl text-lg shadow-lg transition-all duration-300 hover:scale-[1.02]`}
+              style={{ boxShadow: `0 4px 30px ${meta.glowColor}` }}
             >
-              {loading ? 'Registering...' : 'Register'}
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Registering...
+                </span>
+              ) : (
+                `Complete Registration for ${meta.label} →`
+              )}
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </motion.div>
+      </div>
+
+      {/* Success Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="bg-black/90 border-red-700 text-white">
-          <div className="flex flex-col items-center gap-4">
-            <span className="bg-black/60 rounded-full p-3 mb-2 animate-bounce shadow-lg">
-              <Icon className="w-10 h-10 text-red-500 drop-shadow-lg" />
-            </span>
-            <h2 className="text-2xl font-bold">Registration Successful!</h2>
-            <p>Your child has been registered for {sport.charAt(0).toUpperCase() + sport.slice(1)}.</p>
-            <Button onClick={() => router.push('/sports')} className="bg-red-600 hover:bg-red-700 w-full">Back to Sports</Button>
+        <DialogContent className="bg-black/95 border-red-700 text-white backdrop-blur-xl">
+          <div className="flex flex-col items-center gap-4 py-4">
+            <div className="text-5xl">{meta.badge}</div>
+            <h2 className="font-brand text-2xl font-bold text-luxury">Registration Complete!</h2>
+            <p className="text-gray-300 text-center">
+              <strong>{name}</strong> has been registered for <strong>{meta.label}</strong> on February 25, 2026.
+            </p>
+            <p className="text-gray-500 text-sm text-center">You&apos;ll receive a confirmation email with event details.</p>
+            <div className="flex gap-3 w-full">
+              <Button onClick={() => router.push('/sports')} variant="outline" className="flex-1 border-red-600/50 text-red-400 hover:bg-red-900/30 font-brand rounded-xl">
+                ← Back to Sports
+              </Button>
+              <Button onClick={() => { setOpen(false); setName(''); setAge(''); }} className="flex-1 bg-red-600 hover:bg-red-500 text-white font-brand rounded-xl">
+                Register Another
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
@@ -205,5 +318,9 @@ function RegisterContent() {
 }
 
 export default function Register() {
-  return <Suspense fallback={<div>Loading...</div>}><RegisterContent /></Suspense>;
+  return <Suspense fallback={
+    <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+    </div>
+  }><RegisterContent /></Suspense>;
 }
