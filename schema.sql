@@ -4,8 +4,8 @@
 -- Enable UUID extension if not already enabled
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Profiles table (parents/guardians)
-CREATE TABLE profiles (
+-- Only create tables if they do not exist
+CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT,
@@ -15,8 +15,7 @@ CREATE TABLE profiles (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Kids table (comprehensive registration)
-CREATE TABLE kids (
+CREATE TABLE IF NOT EXISTS kids (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   parent_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
@@ -36,8 +35,7 @@ CREATE TABLE kids (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Coach Submissions table
-CREATE TABLE coach_submissions (
+CREATE TABLE IF NOT EXISTS coach_submissions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   age TEXT NOT NULL,
@@ -57,6 +55,18 @@ CREATE TABLE coach_submissions (
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE kids ENABLE ROW LEVEL SECURITY;
 ALTER TABLE coach_submissions ENABLE ROW LEVEL SECURITY;
+
+-- Drop policies if they already exist before creating
+DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
+DROP POLICY IF EXISTS "Parents can view own kids" ON kids;
+DROP POLICY IF EXISTS "Parents can insert own kids" ON kids;
+DROP POLICY IF EXISTS "Admins can view all kids" ON kids;
+DROP POLICY IF EXISTS "Admins can view all profiles" ON profiles;
+DROP POLICY IF EXISTS "Admins can view all coach submissions" ON coach_submissions;
+DROP POLICY IF EXISTS "Admins can insert coach submissions" ON coach_submissions;
+DROP POLICY IF EXISTS "Anyone can submit coach application" ON coach_submissions;
 
 -- Policies for profiles
 CREATE POLICY "Users can view own profile" ON profiles
