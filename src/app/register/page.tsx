@@ -67,6 +67,7 @@ function RegisterContent() {
   const [school, setSchool] = useState('');
   const [grade, setGrade] = useState('');
   const [experienceLevel, setExperienceLevel] = useState('beginner');
+  const [parentName, setParentName] = useState('');
   const [parentPhone, setParentPhone] = useState('');
   const [emergencyName, setEmergencyName] = useState('');
   const [emergencyPhone, setEmergencyPhone] = useState('');
@@ -109,6 +110,7 @@ function RegisterContent() {
       
       setProfile(profileData as Profile);
       if (profileData?.phone) setParentPhone(profileData.phone);
+      if (profileData?.name) setParentName(profileData.name);
     };
     getUser();
   }, [router]);
@@ -151,15 +153,19 @@ function RegisterContent() {
         throw new Error('Registration failed: No data returned');
       }
 
-      // Also update parent phone in profile if provided
-      if (parentPhone && supabase) {
+      // Update parent phone and name in profile if provided
+      if ((parentPhone || parentName) && supabase) {
+        const updateData: { phone?: string; name?: string } = {};
+        if (parentPhone) updateData.phone = parentPhone;
+        if (parentName) updateData.name = parentName;
+        
         const { error: updateError } = await supabase
           .from('profiles')
-          .update({ phone: parentPhone })
+          .update(updateData)
           .eq('id', profile.id);
         
         if (updateError) {
-          console.warn('Failed to update parent phone:', updateError);
+          console.warn('Failed to update parent info:', updateError);
         }
       }
 
@@ -291,6 +297,12 @@ function RegisterContent() {
             {/* Separator */}
             <div className="border-t border-red-900/30 pt-4">
               <h3 className="font-brand text-lg font-bold text-red-400 mb-3">📞 Contact Information</h3>
+            </div>
+
+            {/* Parent Name */}
+            <div>
+              <Label htmlFor="parent-name" className="text-gray-300 text-sm font-semibold">Parent/Guardian Full Name *</Label>
+              <Input id="parent-name" type="text" placeholder="Full name" value={parentName} onChange={(e) => setParentName(e.target.value)} required className={inputClass} />
             </div>
 
             {/* Parent Phone */}
