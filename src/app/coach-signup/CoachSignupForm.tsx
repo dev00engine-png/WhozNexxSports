@@ -31,8 +31,11 @@ export default function CoachSignupForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const validEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  const validPhone = (v: string) => /^[0-9+()\-\s]{7,20}$/.test(v);
+  const validEmail = (v: string) => v.includes('@') && v.includes('.') && v.length > 5;
+  const validPhone = (v: string) => {
+    const digits = Array.from(v).filter((ch) => '0123456789'.includes(ch)).length;
+    return digits >= 7 && digits <= 20;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
