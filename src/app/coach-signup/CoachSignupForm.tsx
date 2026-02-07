@@ -1,5 +1,7 @@
 "use client";
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 
 export default function CoachSignupForm() {
@@ -26,10 +28,65 @@ export default function CoachSignupForm() {
     }));
   };
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const validEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const validPhone = (v: string) => /^[0-9+()\-\s]{7,20}$/.test(v);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Submit to Supabase
-    setSubmitted(true);
+    setError(null);
+
+    // Basic client-side validation
+    if (!validEmail(form.email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+    if (!validPhone(form.phone)) {
+      setError('Please enter a valid phone number.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      if (!supabase) {
+        // Supabase not configured; fallback to local success
+        console.warn('Supabase client not initialized. Submission will not be saved to DB.');
+        setSubmitted(true);
+        setLoading(false);
+        return;
+      }
+
+      const payload = {
+        name: form.name,
+        age: form.age,
+        phone: form.phone,
+        best_times: form.bestTimes,
+        availability: form.availability,
+        background: form.background,
+        sport: form.sport,
+        email: form.email,
+        pitch: form.pitch,
+        final_thoughts: form.finalThoughts,
+        acknowledgement: form.acknowledgement,
+      };
+
+      const { data, error: insertError } = await supabase.from('coach_submissions').insert([payload]);
+      if (insertError) {
+        console.error('Supabase insert error', insertError);
+        setError(insertError.message || 'Failed to submit.');
+        setLoading(false);
+        return;
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      console.error(err);
+      setError(err?.message || 'Submission failed.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -46,12 +103,12 @@ export default function CoachSignupForm() {
       {/* Floating mosaic collage background */}
       <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute left-1/2 top-10 w-[1400px] max-w-none -translate-x-1/2 opacity-40 grid grid-cols-6 gap-4 pointer-events-none">
-          <img src="/coach1.jpg" alt="" className="w-40 h-40 object-cover rounded-xl shadow-2xl transform rotate-3 translate-y-2 animate-float" />
-          <img src="/coach2.jpg" alt="" className="w-36 h-36 object-cover rounded-lg shadow-xl transform -rotate-6 -translate-y-2 animate-float delay-1000" />
-          <img src="/coach3.jpg" alt="" className="w-44 h-44 object-cover rounded-2xl shadow-2xl transform rotate-6 translate-y-1 animate-float delay-2000" />
-          <img src="/coach4.jpg" alt="" className="w-36 h-36 object-cover rounded-lg shadow-xl transform -rotate-3 translate-y-3 animate-float delay-500" />
-          <img src="/coach5.jpg" alt="" className="w-40 h-40 object-cover rounded-xl shadow-2xl transform rotate-2 -translate-y-1 animate-float delay-1500" />
-          <img src="/coach6.jpg" alt="" className="w-36 h-36 object-cover rounded-lg shadow-xl transform -rotate-8 translate-y-4 animate-float delay-700" />
+          <motion.img whileHover={{ scale: 1.06, rotate: 2 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach1.jpg" alt="" className="w-40 h-40 object-cover rounded-xl shadow-2xl transform rotate-3 translate-y-2" />
+          <motion.img whileHover={{ scale: 1.05, rotate: -3 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach2.jpg" alt="" className="w-36 h-36 object-cover rounded-lg shadow-xl transform -rotate-6 -translate-y-2" />
+          <motion.img whileHover={{ scale: 1.07, rotate: 4 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach3.jpg" alt="" className="w-44 h-44 object-cover rounded-2xl shadow-2xl transform rotate-6 translate-y-1" />
+          <motion.img whileHover={{ scale: 1.05, rotate: -2 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach4.jpg" alt="" className="w-36 h-36 object-cover rounded-lg shadow-xl transform -rotate-3 translate-y-3" />
+          <motion.img whileHover={{ scale: 1.06, rotate: 1 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach5.jpg" alt="" className="w-40 h-40 object-cover rounded-xl shadow-2xl transform rotate-2 -translate-y-1" />
+          <motion.img whileHover={{ scale: 1.05, rotate: -5 }} transition={{ type: 'spring', stiffness: 200 }} src="/coach6.jpg" alt="" className="w-36 h-36 object-cover rounded-lg shadow-xl transform -rotate-8 translate-y-4" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/90 to-black/95" />
       </div>
@@ -123,8 +180,11 @@ export default function CoachSignupForm() {
         </div>
       </div>
 
+      {error && <div className="text-sm text-red-400 bg-black/40 p-3 rounded-md">{error}</div>}
       <div className="flex items-center gap-3">
-        <Button type="submit" className="flex-1 bg-gradient-to-r from-red-600 via-red-500 to-red-600 hover:from-red-700 hover:to-red-500 text-white font-bold py-3 rounded-2xl text-lg shadow-lg transition-all duration-300 hover:scale-[1.02]">Submit Application</Button>
+        <Button type="submit" disabled={loading} className="flex-1 bg-gradient-to-r from-red-600 via-red-500 to-red-600 hover:from-red-700 hover:to-red-500 text-white font-bold py-3 rounded-2xl text-lg shadow-lg transition-all duration-300 hover:scale-[1.02]">
+          {loading ? 'Submitting...' : 'Submit Application'}
+        </Button>
         <button type="button" onClick={() => setForm({name:'',age:'',phone:'',bestTimes:'',availability:'',background:'',sport:'',email:'',pitch:'',finalThoughts:'',acknowledgement:false})} className="px-4 py-3 rounded-lg border border-gray-800 text-gray-300 hover:bg-white/5">Reset</button>
       </div>
     </form>
