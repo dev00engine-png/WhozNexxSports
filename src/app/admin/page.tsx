@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 interface Kid {
   id: string
@@ -33,6 +34,8 @@ export default function Admin() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedKid, setSelectedKid] = useState<Kid | null>(null)
+  const [detailsOpen, setDetailsOpen] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -42,15 +45,24 @@ export default function Admin() {
       router.push('/')
       return
     }
-    setAuthorized(true)
 
     const fetchData = async () => {
-      if (!supabase) { setLoading(false); return }
+      setAuthorized(true)
+      
+      if (!supabase) { 
+        console.error('Supabase client not initialized')
+        setLoading(false)
+        return 
+      }
 
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { setLoading(false); return }
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      if (userError || !user) { 
+        console.error('User not authenticated:', userError)
+        setLoading(false)
+        return 
+      }
 
-      const { data: kidsData } = await supabase
+      const { data: kidsData, error: kidsError } = await supabase
         .from('kids')
         .select(`
           id, name, age, sport, gender, school, grade,
@@ -61,7 +73,15 @@ export default function Admin() {
         `)
         .order('created_at', { ascending: false })
 
-      setKids((kidsData as any) || [])
+      if (kidsError) {
+        console.error('Error fetching kids:', kidsError)
+        alert(`Failed to load registrations: ${kidsError.message}`)
+        setKids([])
+      } else {
+        console.log('Fetched kids data:', kidsData)
+        setKids((kidsData as Kid[]) || [])
+      }
+      
       setLoading(false)
     }
     fetchData()
@@ -70,6 +90,11 @@ export default function Admin() {
   const handleLogout = () => {
     sessionStorage.removeItem('wns_admin')
     router.push('/')
+  }
+
+  const handleViewDetails = (kid: Kid) => {
+    setSelectedKid(kid)
+    setDetailsOpen(true)
   }
 
   if (!authorized) return null
@@ -186,16 +211,14 @@ export default function Admin() {
                     <th className="px-4 py-3 text-left text-xs font-brand font-bold text-red-400 uppercase tracking-wider">📞 Phone</th>
                     <th className="px-4 py-3 text-left text-xs font-brand font-bold text-red-400 uppercase tracking-wider">Email</th>
                     <th className="px-4 py-3 text-left text-xs font-brand font-bold text-red-400 uppercase tracking-wider">Level</th>
-                    <th className="px-4 py-3 text-left text-xs font-brand font-bold text-red-400 uppercase tracking-wider">School</th>
-                    <th className="px-4 py-3 text-left text-xs font-brand font-bold text-red-400 uppercase tracking-wider">Shirt</th>
-                    <th className="px-4 py-3 text-left text-xs font-brand font-bold text-red-400 uppercase tracking-wider">Emergency</th>
                     <th className="px-4 py-3 text-left text-xs font-brand font-bold text-red-400 uppercase tracking-wider">Date</th>
+                    <th className="px-4 py-3 text-left text-xs font-brand font-bold text-red-400 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-800/50">
                   {filteredKids.length === 0 ? (
                     <tr>
-                      <td colSpan={11} className="px-4 py-12 text-center text-gray-500">
+                      <td colSpan={9} className="px-4 py-12 text-center text-gray-500">
                         No registrations found.
                       </td>
                     </tr>
@@ -215,15 +238,17 @@ export default function Admin() {
                           <td className="px-4 py-3 text-yellow-400 font-semibold">{phone}</td>
                           <td className="px-4 py-3 text-gray-400">{kid.profiles?.[0]?.email || '—'}</td>
                           <td className="px-4 py-3 text-gray-300 capitalize">{kid.experience_level || '—'}</td>
-                          <td className="px-4 py-3 text-gray-300">{kid.school || '—'}</td>
-                          <td className="px-4 py-3 text-gray-300">{kid.shirt_size || '—'}</td>
-                          <td className="px-4 py-3 text-gray-400 text-xs">
-                            {kid.emergency_contact_name ? (
-                              <span>{kid.emergency_contact_name}<br/>{kid.emergency_contact_phone}</span>
-                            ) : '—'}
-                          </td>
                           <td className="px-4 py-3 text-gray-500 text-xs">
                             {kid.created_at ? new Date(kid.created_at).toLocaleDateString() : '—'}
+                          </td>
+                          <td className="px-4 py-3">
+                            <Button 
+                              onClick={() => handleViewDetails(kid)}
+                              variant="outline" 
+                              className="border-red-600/50 text-red-400 hover:bg-red-900/30 text-xs px-3 py-1 h-auto rounded-lg"
+                            >
+                              View Full
+                            </Button>
                           </td>
                         </tr>
                       )
@@ -242,6 +267,149 @@ export default function Admin() {
           </p>
         </div>
       </div>
+
+      {/* Detailed View Modal */}
+      <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+        <DialogContent className="bg-black/95 border-red-700 text-white backdrop-blur-xl max-w-3xl max-h-[90vh] overflow-y-auto">
+          {selectedKid && (
+            <div className="space-y-6 py-4">
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-red-900/30 pb-4">
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className={`inline-block px-3 py-1 rounded text-sm font-bold text-white ${sportColors[selectedKid.sport] || 'bg-gray-600'}`}>
+                      {selectedKid.sport.toUpperCase()}
+                    </span>
+                    <span className="badge-premium text-xs">
+                      Registered {selectedKid.created_at ? new Date(selectedKid.created_at).toLocaleDateString() : 'Unknown'}
+                    </span>
+                  </div>
+                  <h2 className="font-brand text-3xl font-bold text-luxury">{selectedKid.name}</h2>
+                  <p className="text-gray-400 text-sm mt-1">Complete Registration Details</p>
+                </div>
+              </div>
+
+              {/* Athlete Information */}
+              <div>
+                <h3 className="font-brand text-xl font-bold text-red-400 mb-3 flex items-center gap-2">
+                  🏃 Athlete Information
+                </h3>
+                <div className="glass-card rounded-xl p-4 grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-gray-500">Full Name:</span>
+                    <p className="text-white font-semibold">{selectedKid.name}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Age:</span>
+                    <p className="text-white font-semibold">{selectedKid.age} years old</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Gender:</span>
+                    <p className="text-white font-semibold capitalize">{selectedKid.gender || 'Not specified'}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Grade:</span>
+                    <p className="text-white font-semibold">{selectedKid.grade || 'Not specified'}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">School:</span>
+                    <p className="text-white font-semibold">{selectedKid.school || 'Not specified'}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Experience Level:</span>
+                    <p className="text-white font-semibold capitalize">{selectedKid.experience_level || 'Not specified'}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Shirt Size:</span>
+                    <p className="text-white font-semibold">{selectedKid.shirt_size || 'Not specified'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Parent/Guardian Information */}
+              <div>
+                <h3 className="font-brand text-xl font-bold text-red-400 mb-3 flex items-center gap-2">
+                  👨‍👩‍👧 Parent/Guardian Contact
+                </h3>
+                <div className="glass-card rounded-xl p-4 grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-gray-500">Parent Name:</span>
+                    <p className="text-white font-semibold">{selectedKid.profiles?.[0]?.name || 'Not provided'}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Parent Email:</span>
+                    <p className="text-white font-semibold">{selectedKid.profiles?.[0]?.email || 'Not provided'}</p>
+                  </div>
+                  <div className="col-span-2">
+                    <span className="text-gray-500">Parent Phone:</span>
+                    <p className="text-yellow-400 font-bold text-lg">{selectedKid.parent_phone || selectedKid.profiles?.[0]?.phone || 'Not provided'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Emergency Contact */}
+              <div>
+                <h3 className="font-brand text-xl font-bold text-red-400 mb-3 flex items-center gap-2">
+                  🚨 Emergency Contact
+                </h3>
+                <div className="glass-card rounded-xl p-4 grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-gray-500">Contact Name:</span>
+                    <p className="text-white font-semibold">{selectedKid.emergency_contact_name || 'Not provided'}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Contact Phone:</span>
+                    <p className="text-yellow-400 font-bold">{selectedKid.emergency_contact_phone || 'Not provided'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Medical & Special Notes */}
+              {(selectedKid.medical_notes || selectedKid.special_requests) && (
+                <div>
+                  <h3 className="font-brand text-xl font-bold text-red-400 mb-3 flex items-center gap-2">
+                    📋 Additional Information
+                  </h3>
+                  <div className="glass-card rounded-xl p-4 space-y-4 text-sm">
+                    {selectedKid.medical_notes && (
+                      <div>
+                        <span className="text-gray-500 font-semibold">Medical Notes / Allergies:</span>
+                        <p className="text-white mt-1 whitespace-pre-wrap">{selectedKid.medical_notes}</p>
+                      </div>
+                    )}
+                    {selectedKid.special_requests && (
+                      <div>
+                        <span className="text-gray-500 font-semibold">Special Requests:</span>
+                        <p className="text-white mt-1 whitespace-pre-wrap">{selectedKid.special_requests}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                <Button 
+                  onClick={() => setDetailsOpen(false)}
+                  className="flex-1 bg-red-600 hover:bg-red-500 text-white font-brand rounded-xl"
+                >
+                  Close
+                </Button>
+                <Button 
+                  onClick={() => {
+                    const phone = selectedKid.parent_phone || selectedKid.profiles?.[0]?.phone
+                    if (phone) window.open(`tel:${phone}`)
+                  }}
+                  variant="outline"
+                  className="flex-1 border-green-600/50 text-green-400 hover:bg-green-900/30 font-brand rounded-xl"
+                >
+                  📞 Call Parent
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

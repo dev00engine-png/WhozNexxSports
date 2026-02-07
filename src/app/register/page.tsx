@@ -34,9 +34,25 @@ const sportMeta: Record<string, {
   },
 };
 
+interface Profile {
+  id: string;
+  user_id: string;
+  email: string | null;
+  phone: string | null;
+  name: string | null;
+  role: string;
+  created_at: string;
+}
+
+interface User {
+  id: string;
+  email?: string;
+  [key: string]: unknown;
+}
+
 function RegisterContent() {
-  const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -60,13 +76,38 @@ function RegisterContent() {
 
   useEffect(() => {
     const getUser = async () => {
-      if (!supabase) { router.push('/auth'); return; }
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { router.push('/auth'); return; }
+      if (!supabase) { 
+        console.error('Supabase client not initialized');
+        router.push('/auth'); 
+        return; 
+      }
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) { 
+        console.error('User not authenticated:', userError);
+        router.push('/auth'); 
+        return; 
+      }
       setUser(user);
-      const { data: profileData } = await supabase
-        .from('profiles').select('*').eq('user_id', user.id).single();
-      setProfile(profileData);
+      
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (profileError) {
+        console.error('Failed to fetch profile:', profileError);
+        alert('Failed to load your profile. Please try logging out and back in.');
+        return;
+      }
+      
+      if (!profileData) {
+        console.error('No profile found for user');
+        alert('Profile not found. Please contact support.');
+        return;
+      }
+      
+      setProfile(profileData as Profile);
       if (profileData?.phone) setParentPhone(profileData.phone);
     };
     getUser();
@@ -74,33 +115,60 @@ function RegisterContent() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!profile || !sport || !supabase) return;
+    if (!profile || !sport || !supabase) {
+      alert('Missing required information. Please try logging in again.');
+      return;
+    }
     setLoading(true);
     try {
-      const { error } = await (supabase as any).from('kids').insert({
-        parent_id: profile.id,
-        name,
-        age: parseInt(age),
-        sport,
-        gender: gender || null,
-        school: school || null,
-        grade: grade || null,
-        experience_level: experienceLevel || null,
-        parent_phone: parentPhone || null,
-        emergency_contact_name: emergencyName || null,
-        emergency_contact_phone: emergencyPhone || null,
-        shirt_size: shirtSize || null,
-        medical_notes: medicalNotes || null,
-        special_requests: specialRequests || null,
-      });
-      if (error) throw error;
+      // Insert the kid registration
+      const { data: insertedKid, error: insertError } = await supabase
+        .from('kids')
+        .insert({
+          parent_id: profile.id,
+          name,
+          age: parseInt(age),
+          sport,
+          gender: gender || null,
+          school: school || null,
+          grade: grade || null,
+          experience_level: experienceLevel || null,
+          parent_phone: parentPhone || null,
+          emergency_contact_name: emergencyName || null,
+          emergency_contact_phone: emergencyPhone || null,
+          shirt_size: shirtSize || null,
+          medical_notes: medicalNotes || null,
+          special_requests: specialRequests || null,
+        })
+        .select();
+
+      if (insertError) {
+        console.error('Insert error:', insertError);
+        throw new Error(`Registration failed: ${insertError.message}`);
+      }
+
+      if (!insertedKid || insertedKid.length === 0) {
+        throw new Error('Registration failed: No data returned');
+      }
+
       // Also update parent phone in profile if provided
       if (parentPhone && supabase) {
-        await supabase.from('profiles').update({ phone: parentPhone }).eq('id', profile.id);
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({ phone: parentPhone })
+          .eq('id', profile.id);
+        
+        if (updateError) {
+          console.warn('Failed to update parent phone:', updateError);
+        }
       }
+
+      console.log('Registration successful:', insertedKid);
       setOpen(true);
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Registration error:', error);
+      alert(`Registration failed: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
