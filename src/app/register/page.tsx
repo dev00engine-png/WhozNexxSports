@@ -195,9 +195,9 @@ function RegisterContent() {
   const selectClass = 'bg-black/60 border border-gray-700 text-white rounded-lg px-3 py-2 w-full focus:border-red-500 focus:ring-1 focus:ring-red-500/50 focus:outline-none';
 
   return (
-    <div className="min-h-screen bg-black text-white pb-20">
+    <div className="min-h-screen bg-black text-white pb-16 sm:pb-20">
       {/* Sport Header with 3D image */}
-      <div className="relative h-64 md:h-80 overflow-hidden">
+      <div className="relative h-48 sm:h-64 md:h-80 overflow-hidden">
         <img
           src={meta.image}
           alt={meta.label}
@@ -206,50 +206,50 @@ function RegisterContent() {
         />
         <div className={`absolute inset-0 bg-gradient-to-t ${meta.gradient} opacity-70`} />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
+        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="flex items-center gap-3 mb-2">
-              <img src="/logo88.png" alt="" className="h-8 w-auto" style={{ filter: 'drop-shadow(0 0 8px rgba(255,0,0,0.5))' }} />
-              <span className="badge-sport text-sm">{meta.badge} {meta.label}</span>
+            <div className="flex items-center gap-2 sm:gap-3 mb-2 flex-wrap">
+              <img src="/logo88.png" alt="" className="h-7 sm:h-8 w-auto" style={{ filter: 'drop-shadow(0 0 8px rgba(255,0,0,0.5))' }} />
+              <span className="badge-sport text-xs sm:text-sm">{meta.badge} {meta.label}</span>
             </div>
-            <h1 className="font-brand text-3xl md:text-4xl font-black text-white"
+            <h1 className="font-brand text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white"
               style={{ textShadow: `0 0 30px ${meta.glowColor}` }}
             >
               Register for {meta.label}
             </h1>
-            <p className="text-gray-300 text-sm mt-1">February 25, 2026 · All Skill Levels Welcome</p>
+            <p className="text-gray-300 text-xs sm:text-sm mt-1">February 25, 2026 · All Skill Levels Welcome</p>
           </motion.div>
         </div>
       </div>
 
       {/* Registration Form */}
-      <div className="max-w-2xl mx-auto px-4 -mt-8 relative z-10">
+      <div className="max-w-2xl mx-auto px-3 sm:px-4 md:px-6 -mt-6 sm:-mt-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="glass-card rounded-2xl p-6 md:p-8 animate-border-glow"
+          className="glass-card rounded-2xl p-4 sm:p-6 md:p-8 animate-border-glow"
         >
-          <h2 className="font-brand text-xl font-bold text-white mb-1">Athlete Registration</h2>
-          <p className="text-gray-400 text-sm mb-6">Complete all fields below to secure your spot.</p>
+          <h2 className="font-brand text-lg sm:text-xl font-bold text-white mb-1">Athlete Registration</h2>
+          <p className="text-gray-400 text-xs sm:text-sm mb-4 sm:mb-6">Complete all fields below to secure your spot.</p>
 
-          <form onSubmit={handleRegister} className="space-y-5">
+          <form onSubmit={handleRegister} className="space-y-4 sm:space-y-5">
             {/* Row: Name + Age */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <Label htmlFor="kid-name" className="text-gray-300 text-sm font-semibold">Child&apos;s Full Name *</Label>
+                <Label htmlFor="kid-name" className="text-gray-300 text-xs sm:text-sm font-semibold">Child&apos;s Full Name *</Label>
                 <Input id="kid-name" type="text" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} required className={inputClass} />
               </div>
               <div>
-                <Label htmlFor="kid-age" className="text-gray-300 text-sm font-semibold">Age *</Label>
+                <Label htmlFor="kid-age" className="text-gray-300 text-xs sm:text-sm font-semibold">Age *</Label>
                 <Input id="kid-age" type="number" placeholder="Age" value={age} onChange={(e) => setAge(e.target.value)} required min="3" max="18" className={inputClass} />
               </div>
             </div>
 
             {/* Row: Gender + Grade */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <Label htmlFor="gender" className="text-gray-300 text-sm font-semibold">Gender</Label>
+                <Label htmlFor="gender" className="text-gray-300 text-xs sm:text-sm font-semibold">Gender</Label>
                 <select id="gender" value={gender} onChange={(e) => setGender(e.target.value)} className={selectClass}>
                   <option value="">Select...</option>
                   <option value="male">Male</option>
@@ -258,19 +258,19 @@ function RegisterContent() {
                 </select>
               </div>
               <div>
-                <Label htmlFor="grade" className="text-gray-300 text-sm font-semibold">Grade</Label>
+                <Label htmlFor="grade" className="text-gray-300 text-xs sm:text-sm font-semibold">Grade</Label>
                 <Input id="grade" type="text" placeholder="e.g. 5th" value={grade} onChange={(e) => setGrade(e.target.value)} className={inputClass} />
               </div>
             </div>
 
             {/* Row: School + Experience */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <Label htmlFor="school" className="text-gray-300 text-sm font-semibold">School</Label>
+                <Label htmlFor="school" className="text-gray-300 text-xs sm:text-sm font-semibold">School</Label>
                 <Input id="school" type="text" placeholder="School name" value={school} onChange={(e) => setSchool(e.target.value)} className={inputClass} />
               </div>
               <div>
-                <Label htmlFor="experience" className="text-gray-300 text-sm font-semibold">Experience Level</Label>
+                <Label htmlFor="experience" className="text-gray-300 text-xs sm:text-sm font-semibold">Experience Level</Label>
                 <select id="experience" value={experienceLevel} onChange={(e) => setExperienceLevel(e.target.value)} className={selectClass}>
                   <option value="beginner">Beginner</option>
                   <option value="intermediate">Intermediate</option>
@@ -281,7 +281,7 @@ function RegisterContent() {
 
             {/* Shirt Size */}
             <div>
-              <Label htmlFor="shirt" className="text-gray-300 text-sm font-semibold">Shirt Size</Label>
+              <Label htmlFor="shirt" className="text-gray-300 text-xs sm:text-sm font-semibold">Shirt Size</Label>
               <select id="shirt" value={shirtSize} onChange={(e) => setShirtSize(e.target.value)} className={selectClass}>
                 <option value="">Select...</option>
                 <option value="YS">Youth Small</option>
@@ -295,60 +295,60 @@ function RegisterContent() {
             </div>
 
             {/* Separator */}
-            <div className="border-t border-red-900/30 pt-4">
-              <h3 className="font-brand text-lg font-bold text-red-400 mb-3">📞 Contact Information</h3>
+            <div className="border-t border-red-900/30 pt-3 sm:pt-4">
+              <h3 className="font-brand text-base sm:text-lg font-bold text-red-400 mb-2 sm:mb-3">📞 Contact Information</h3>
             </div>
 
             {/* Parent Name */}
             <div>
-              <Label htmlFor="parent-name" className="text-gray-300 text-sm font-semibold">Parent/Guardian Full Name *</Label>
+              <Label htmlFor="parent-name" className="text-gray-300 text-xs sm:text-sm font-semibold">Parent/Guardian Full Name *</Label>
               <Input id="parent-name" type="text" placeholder="Full name" value={parentName} onChange={(e) => setParentName(e.target.value)} required className={inputClass} />
             </div>
 
             {/* Parent Phone */}
             <div>
-              <Label htmlFor="parent-phone" className="text-gray-300 text-sm font-semibold">Parent/Guardian Phone *</Label>
+              <Label htmlFor="parent-phone" className="text-gray-300 text-xs sm:text-sm font-semibold">Parent/Guardian Phone *</Label>
               <Input id="parent-phone" type="tel" placeholder="(555) 123-4567" value={parentPhone} onChange={(e) => setParentPhone(e.target.value)} required className={inputClass} />
             </div>
 
             {/* Emergency Contact */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <Label htmlFor="emergency-name" className="text-gray-300 text-sm font-semibold">Emergency Contact Name</Label>
+                <Label htmlFor="emergency-name" className="text-gray-300 text-xs sm:text-sm font-semibold">Emergency Contact Name</Label>
                 <Input id="emergency-name" type="text" placeholder="Contact name" value={emergencyName} onChange={(e) => setEmergencyName(e.target.value)} className={inputClass} />
               </div>
               <div>
-                <Label htmlFor="emergency-phone" className="text-gray-300 text-sm font-semibold">Emergency Contact Phone</Label>
+                <Label htmlFor="emergency-phone" className="text-gray-300 text-xs sm:text-sm font-semibold">Emergency Contact Phone</Label>
                 <Input id="emergency-phone" type="tel" placeholder="(555) 987-6543" value={emergencyPhone} onChange={(e) => setEmergencyPhone(e.target.value)} className={inputClass} />
               </div>
             </div>
 
             {/* Separator */}
-            <div className="border-t border-red-900/30 pt-4">
-              <h3 className="font-brand text-lg font-bold text-red-400 mb-3">📋 Additional Information</h3>
+            <div className="border-t border-red-900/30 pt-3 sm:pt-4">
+              <h3 className="font-brand text-base sm:text-lg font-bold text-red-400 mb-2 sm:mb-3">📋 Additional Information</h3>
             </div>
 
             {/* Medical Notes */}
             <div>
-              <Label htmlFor="medical" className="text-gray-300 text-sm font-semibold">Medical Notes / Allergies</Label>
+              <Label htmlFor="medical" className="text-gray-300 text-xs sm:text-sm font-semibold">Medical Notes / Allergies</Label>
               <textarea
                 id="medical"
                 placeholder="Any medical conditions, allergies, or medications..."
                 value={medicalNotes}
                 onChange={(e) => setMedicalNotes(e.target.value)}
-                className={`${selectClass} min-h-[80px] resize-y`}
+                className={`${selectClass} min-h-[70px] sm:min-h-[80px] resize-y`}
               />
             </div>
 
             {/* Special Requests */}
             <div>
-              <Label htmlFor="requests" className="text-gray-300 text-sm font-semibold">Special Requests</Label>
+              <Label htmlFor="requests" className="text-gray-300 text-xs sm:text-sm font-semibold">Special Requests</Label>
               <textarea
                 id="requests"
                 placeholder="Any special requests or notes for coaches..."
                 value={specialRequests}
                 onChange={(e) => setSpecialRequests(e.target.value)}
-                className={`${selectClass} min-h-[80px] resize-y`}
+                className={`${selectClass} min-h-[70px] sm:min-h-[80px] resize-y`}
               />
             </div>
 
@@ -356,16 +356,16 @@ function RegisterContent() {
             <Button
               type="submit"
               disabled={loading}
-              className={`w-full bg-gradient-to-r ${meta.gradient} hover:brightness-125 text-white font-brand font-bold py-4 px-6 rounded-xl text-lg shadow-lg transition-all duration-300 hover:scale-[1.02]`}
+              className={`w-full bg-gradient-to-r ${meta.gradient} hover:brightness-125 text-white font-brand font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl text-sm sm:text-base md:text-lg shadow-lg transition-all duration-300 hover:scale-[1.02] whitespace-nowrap overflow-hidden text-ellipsis`}
               style={{ boxShadow: `0 4px 30px ${meta.glowColor}` }}
             >
               {loading ? (
-                <span className="flex items-center gap-2">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="flex items-center justify-center gap-2">
+                  <div className="w-4 sm:w-5 h-4 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   Registering...
                 </span>
               ) : (
-                `Complete Registration for ${meta.label} →`
+                `Register →`
               )}
             </Button>
           </form>
@@ -374,19 +374,19 @@ function RegisterContent() {
 
       {/* Success Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="bg-black/95 border-red-700 text-white backdrop-blur-xl">
-          <div className="flex flex-col items-center gap-4 py-4">
-            <div className="text-5xl">{meta.badge}</div>
-            <h2 className="font-brand text-2xl font-bold text-luxury">Registration Complete!</h2>
-            <p className="text-gray-300 text-center">
+        <DialogContent className="bg-black/95 border-red-700 text-white backdrop-blur-xl max-w-sm mx-auto">
+          <div className="flex flex-col items-center gap-3 sm:gap-4 py-3 sm:py-4">
+            <div className="text-4xl sm:text-5xl">{meta.badge}</div>
+            <h2 className="font-brand text-lg sm:text-2xl font-bold text-luxury text-center">Registration Complete!</h2>
+            <p className="text-gray-300 text-center text-xs sm:text-sm">
               <strong>{name}</strong> has been registered for <strong>{meta.label}</strong> on February 25, 2026.
             </p>
-            <p className="text-gray-500 text-sm text-center">You&apos;ll receive a confirmation email with event details.</p>
-            <div className="flex gap-3 w-full">
-              <Button onClick={() => router.push('/sports')} variant="outline" className="flex-1 border-red-600/50 text-red-400 hover:bg-red-900/30 font-brand rounded-xl">
+            <p className="text-gray-500 text-xs text-center">You&apos;ll receive a confirmation email with event details.</p>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
+              <Button onClick={() => router.push('/sports')} variant="outline" className="flex-1 border-red-600/50 text-red-400 hover:bg-red-900/30 font-brand rounded-xl text-xs sm:text-sm py-2 sm:py-3">
                 ← Back to Sports
               </Button>
-              <Button onClick={() => { setOpen(false); setName(''); setAge(''); }} className="flex-1 bg-red-600 hover:bg-red-500 text-white font-brand rounded-xl">
+              <Button onClick={() => { setOpen(false); setName(''); setAge(''); }} className="flex-1 bg-red-600 hover:bg-red-500 text-white font-brand rounded-xl text-xs sm:text-sm py-2 sm:py-3">
                 Register Another
               </Button>
             </div>

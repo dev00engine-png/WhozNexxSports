@@ -131,7 +131,7 @@ export default function Sports() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <div className="relative py-16 px-4 text-center overflow-hidden">
+      <div className="relative py-12 sm:py-16 px-4 sm:px-6 text-center overflow-hidden">
         <div className="absolute inset-0 opacity-10"
           style={{ background: 'radial-gradient(ellipse at center, rgba(200,0,0,0.4), transparent 70%)' }}
         />
@@ -139,21 +139,21 @@ export default function Sports() {
           <img
             src="/logo88.png"
             alt=""
-            className="h-14 w-auto mx-auto mb-4"
+            className="h-12 sm:h-14 w-auto mx-auto mb-3 sm:mb-4"
             style={{ filter: 'drop-shadow(0 0 12px rgba(255,0,0,0.6))' }}
           />
-          <h1 className="font-brand text-4xl md:text-5xl font-bold text-luxury mb-2">Select Your Sport</h1>
-          <p className="text-gray-400 text-lg">Choose your arena. Begin your journey. Feb 25, 2026.</p>
-          <div className="flex justify-center gap-2 mt-4">
-            <span className="badge-premium">🏟️ All Skill Levels</span>
-            <span className="badge-premium">⭐ Professional Coaching</span>
+          <h1 className="font-brand text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-luxury mb-2 px-2">Select Your Sport</h1>
+          <p className="text-gray-400 text-sm sm:text-base md:text-lg px-2">Choose your arena. Begin your journey. Feb 25, 2026.</p>
+          <div className="flex flex-wrap justify-center gap-2 mt-3 sm:mt-4 px-2">
+            <span className="badge-premium text-xs sm:text-sm">🏟️ All Skill Levels</span>
+            <span className="badge-premium text-xs sm:text-sm">⭐ Professional Coaching</span>
           </div>
         </motion.div>
       </div>
 
       {/* Sports Grid */}
-      <div className="max-w-7xl mx-auto px-4 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 pb-16 sm:pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           {sports.map((sport, i) => (
             <motion.div
               key={sport.name}
@@ -168,7 +168,7 @@ export default function Sports() {
               }}
             >
               {/* Sport Image — 3D Pop-out */}
-              <div className="relative h-64 overflow-hidden">
+              <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                 <img
                   src={sport.image}
                   alt={sport.label}
@@ -180,13 +180,13 @@ export default function Sports() {
                 <div className={`absolute inset-0 bg-gradient-to-t ${sport.gradient} opacity-60`} />
 
                 {/* Floating badge */}
-                <div className="absolute top-4 left-4 z-10">
-                  <span className="badge-sport text-base">{sport.badge} {sport.label}</span>
+                <div className="absolute top-2 sm:top-3 left-2 sm:left-4 z-10">
+                  <span className="badge-sport text-xs sm:text-sm">{sport.badge} {sport.label}</span>
                 </div>
 
                 {/* 3D Pop-out Title */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-                  <h2 className="font-brand text-3xl md:text-4xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]"
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-6 z-10">
+                  <h2 className="font-brand text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]"
                     style={{ textShadow: `0 0 30px ${sport.glowColor}` }}
                   >
                     {sport.tagline}
@@ -195,24 +195,24 @@ export default function Sports() {
               </div>
 
               {/* Content */}
-              <div className="p-6 space-y-4">
-                <p className="text-gray-300 text-sm leading-relaxed">{sport.intro}</p>
+              <div className="p-4 sm:p-5 md:p-6 space-y-3 sm:space-y-4">
+                <p className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed">{sport.intro}</p>
 
                 {/* Detail pills */}
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   {sport.details.map((d) => (
-                    <div key={d.label} className="flex gap-3 items-start">
-                      <span className={`${sport.accent} font-brand font-bold text-sm whitespace-nowrap mt-0.5`}>
+                    <div key={d.label} className="flex gap-2 sm:gap-3 items-start">
+                      <span className={`${sport.accent} font-brand font-bold text-xs sm:text-sm whitespace-nowrap mt-0.5`}>
                         {d.label}:
                       </span>
-                      <span className="text-gray-400 text-sm leading-relaxed">{d.text}</span>
+                      <span className="text-gray-400 text-xs sm:text-sm leading-relaxed">{d.text}</span>
                     </div>
                   ))}
                 </div>
 
                 {/* Second image thumbnail */}
-                <div className="flex items-center gap-4 pt-2">
-                  <div className="relative w-20 h-20 rounded-xl overflow-hidden sport-image-3d flex-shrink-0"
+                <div className="flex items-center gap-2 sm:gap-3 md:gap-4 pt-2">
+                  <div className="relative w-16 sm:w-20 h-16 sm:h-20 rounded-lg sm:rounded-xl overflow-hidden sport-image-3d flex-shrink-0"
                     style={{ boxShadow: `0 8px 30px ${sport.glowColor}` }}
                   >
                     <img src={sport.image2} alt="" className="w-full h-full object-cover" />
@@ -220,10 +220,10 @@ export default function Sports() {
                   <div className="flex-1">
                     <Link href={`/register?sport=${sport.name}`}>
                       <Button
-                        className={`w-full bg-gradient-to-r ${sport.gradient} hover:brightness-125 text-white font-brand font-bold py-3 px-6 rounded-xl text-lg shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl`}
+                        className={`w-full bg-gradient-to-r ${sport.gradient} hover:brightness-125 text-white font-brand font-bold py-2 sm:py-3 md:py-3 px-3 sm:px-4 md:px-6 rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl whitespace-nowrap overflow-hidden text-ellipsis`}
                         style={{ boxShadow: `0 4px 25px ${sport.glowColor}` }}
                       >
-                        Sign Up for {sport.label} →
+                        Sign Up →
                       </Button>
                     </Link>
                   </div>

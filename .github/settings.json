@@ -1,0 +1,6 @@
+{
+  "github.copilot.advanced": {
+    "authProvider": "github-enterprise"
+  },
+  "github-enterprise.uri": "https://github.com/enterprises/lockyr-space"
+}

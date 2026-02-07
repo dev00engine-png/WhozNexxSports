@@ -91,7 +91,7 @@ export default function Auth() {
   const inputClass = 'bg-black/60 border-gray-700 text-white placeholder:text-gray-500 focus:border-red-500 focus:ring-1 focus:ring-red-500/50 rounded-lg'
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-black text-white px-3 sm:px-4 py-8 sm:py-12">
       {/* Background glow */}
       <div className="fixed inset-0 z-0 opacity-20"
         style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(200,0,0,0.3), transparent 60%)' }}
@@ -101,21 +101,21 @@ export default function Auth() {
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="relative z-10 max-w-md w-full"
+        className="relative z-10 w-full max-w-md"
       >
-        <div className="glass-card rounded-2xl p-8 animate-border-glow">
+        <div className="glass-card rounded-2xl p-5 sm:p-6 md:p-8 animate-border-glow">
           {/* Header */}
-          <div className="flex flex-col items-center gap-3 mb-6">
+          <div className="flex flex-col items-center gap-2 sm:gap-3 mb-5 sm:mb-6">
             <img
               src="/logo88.png"
               alt="WNS"
-              className="h-16 w-auto"
+              className="h-14 sm:h-16 w-auto"
               style={{ filter: 'drop-shadow(0 0 16px rgba(255,0,0,0.6))' }}
             />
-            <h1 className="font-brand text-2xl md:text-3xl font-bold text-luxury">
+            <h1 className="font-brand text-xl sm:text-2xl md:text-3xl font-bold text-luxury text-center">
               {showReset ? 'Reset Password' : isLogin ? 'Welcome Back' : 'Join the Team'}
             </h1>
-            <p className="text-gray-400 text-sm text-center">
+            <p className="text-gray-400 text-xs sm:text-sm text-center px-1">
               {showReset
                 ? 'Enter your email to receive a reset link'
                 : isLogin
@@ -127,56 +127,65 @@ export default function Auth() {
 
           {!showReset ? (
             <>
-              <form onSubmit={handleAuth} className="space-y-4">
+              <form onSubmit={handleAuth} className="space-y-3 sm:space-y-4">
                 {!isLogin && (
                   <>
                     <div>
-                      <Label htmlFor="name" className="text-gray-300 text-sm font-semibold">Full Name *</Label>
+                      <Label htmlFor="name" className="text-gray-300 text-xs sm:text-sm font-semibold">Full Name *</Label>
                       <Input id="name" type="text" placeholder="Your full name" value={name} onChange={(e) => setName(e.target.value)} required className={inputClass} />
                     </div>
                     <div>
-                      <Label htmlFor="phone" className="text-gray-300 text-sm font-semibold">Phone Number *</Label>
+                      <Label htmlFor="phone" className="text-gray-300 text-xs sm:text-sm font-semibold">Phone Number *</Label>
                       <Input id="phone" type="tel" placeholder="(555) 123-4567" value={phone} onChange={(e) => setPhone(e.target.value)} required className={inputClass} />
                     </div>
                   </>
                 )}
                 <div>
-                  <Label htmlFor="email" className="text-gray-300 text-sm font-semibold">Email *</Label>
+                  <Label htmlFor="email" className="text-gray-300 text-xs sm:text-sm font-semibold">Email *</Label>
                   <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required className={inputClass} />
                 </div>
                 <div>
-                  <Label htmlFor="password" className="text-gray-300 text-sm font-semibold">Password *</Label>
+                  <Label htmlFor="password" className="text-gray-300 text-xs sm:text-sm font-semibold">Password *</Label>
                   <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required className={inputClass} />
                 </div>
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-red-600 hover:bg-red-500 text-white font-brand font-bold py-3 px-4 rounded-xl text-lg shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:shadow-[0_0_40px_rgba(255,0,0,0.4)] transition-all duration-300"
+                  className="w-full bg-red-600 hover:bg-red-500 text-white font-brand font-bold py-2.5 sm:py-3 px-4 rounded-xl text-sm sm:text-base md:text-lg shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:shadow-[0_0_40px_rgba(255,0,0,0.4)] transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   {loading ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      {isLogin ? 'Signing in...' : 'Creating account...'}
-                    </span>
+                    <>
+                      <div className="w-4 sm:w-5 h-4 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span className="hidden sm:inline">{isLogin ? 'Signing in...' : 'Creating account...'}</span>
+                      <span className="sm:hidden">{isLogin ? 'Signing in' : 'Creating'}</span>
+                    </>
                   ) : isLogin ? (
-                    <span className="flex items-center justify-center gap-2"><LogIn className="w-5 h-5" /> Sign In</span>
+                    <>
+                      <LogIn className="w-4 sm:w-5 h-4 sm:h-5" />
+                      <span className="hidden sm:inline">Sign In</span>
+                      <span className="sm:hidden">Sign In</span>
+                    </>
                   ) : (
-                    <span className="flex items-center justify-center gap-2"><UserPlus className="w-5 h-5" /> Create Account</span>
+                    <>
+                      <UserPlus className="w-4 sm:w-5 h-4 sm:h-5" />
+                      <span className="hidden sm:inline">Create Account</span>
+                      <span className="sm:hidden">Create</span>
+                    </>
                   )}
                 </Button>
               </form>
 
-              <div className="flex flex-col gap-2 mt-4">
+              <div className="flex flex-col gap-2 mt-3 sm:mt-4">
                 <Button
                   variant="outline"
                   onClick={() => setIsLogin(!isLogin)}
-                  className="w-full border-gray-700 text-gray-300 hover:bg-red-900/20 hover:text-white hover:border-red-600/50 font-semibold py-2 rounded-xl transition-all"
+                  className="w-full border-gray-700 text-gray-300 hover:bg-red-900/20 hover:text-white hover:border-red-600/50 font-semibold py-2 rounded-xl transition-all text-xs sm:text-sm"
                 >
                   {isLogin ? 'Need an account? Sign Up' : 'Already have an account? Sign In'}
                 </Button>
                 <button
                   onClick={() => setShowReset(true)}
-                  className="text-xs text-gray-500 hover:text-red-400 transition-colors"
+                  className="text-[10px] sm:text-xs text-gray-500 hover:text-red-400 transition-colors"
                   type="button"
                 >
                   Forgot password?
@@ -184,22 +193,22 @@ export default function Auth() {
               </div>
             </>
           ) : (
-            <form onSubmit={handleResetPassword} className="space-y-4">
+            <form onSubmit={handleResetPassword} className="space-y-3 sm:space-y-4">
               <div>
-                <Label htmlFor="reset-email" className="text-gray-300 text-sm font-semibold">Email Address</Label>
+                <Label htmlFor="reset-email" className="text-gray-300 text-xs sm:text-sm font-semibold">Email Address</Label>
                 <Input id="reset-email" type="email" placeholder="you@example.com" value={resetEmail} onChange={(e) => setResetEmail(e.target.value)} required className={inputClass} />
               </div>
               <Button
                 type="submit"
                 disabled={resetLoading}
-                className="w-full bg-red-600 hover:bg-red-500 text-white font-brand font-bold py-3 rounded-xl text-lg shadow-[0_0_20px_rgba(255,0,0,0.3)] transition-all"
+                className="w-full bg-red-600 hover:bg-red-500 text-white font-brand font-bold py-2.5 sm:py-3 rounded-xl text-sm sm:text-base md:text-lg shadow-[0_0_20px_rgba(255,0,0,0.3)] transition-all"
               >
                 {resetLoading ? 'Sending...' : 'Send Reset Email'}
               </Button>
               <Button
                 variant="outline"
                 onClick={() => setShowReset(false)}
-                className="w-full border-gray-700 text-gray-300 hover:bg-red-900/20 hover:text-white font-semibold py-2 rounded-xl"
+                className="w-full border-gray-700 text-gray-300 hover:bg-red-900/20 hover:text-white font-semibold py-2 rounded-xl text-xs sm:text-sm"
                 type="button"
               >
                 ← Back to Login
@@ -211,12 +220,12 @@ export default function Auth() {
 
       {/* Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="bg-black/95 border-red-700/50 text-white backdrop-blur-xl">
+        <DialogContent className="bg-black/95 border-red-700/50 text-white backdrop-blur-xl max-w-sm mx-auto">
           <DialogTitle className="sr-only">Authentication Status</DialogTitle>
-          <div className="flex flex-col items-center gap-4 py-2">
-            <User className="w-10 h-10 text-red-500" />
-            <p className="text-lg text-center text-gray-200">{dialogMsg}</p>
-            <Button onClick={() => setOpen(false)} className="bg-red-600 hover:bg-red-500 w-full font-brand rounded-xl">
+          <div className="flex flex-col items-center gap-3 sm:gap-4 py-2 sm:py-3">
+            <User className="w-8 sm:w-10 h-8 sm:h-10 text-red-500" />
+            <p className="text-xs sm:text-base lg:text-lg text-center text-gray-200">{dialogMsg}</p>
+            <Button onClick={() => setOpen(false)} className="bg-red-600 hover:bg-red-500 w-full font-brand rounded-xl text-sm sm:text-base py-2 sm:py-3">
               OK
             </Button>
           </div>

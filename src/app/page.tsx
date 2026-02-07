@@ -68,7 +68,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.9 }}
-          className="relative z-10 font-brand text-5xl md:text-7xl lg:text-8xl font-black text-center text-luxury leading-tight"
+          className="relative z-10 font-brand text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-center text-luxury leading-tight px-2"
         >
           WhozNexxSports
         </motion.h1>
@@ -78,7 +78,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="relative z-10 mt-4 text-lg md:text-2xl text-gray-300 text-center max-w-2xl font-light tracking-wide"
+          className="relative z-10 mt-3 sm:mt-4 text-sm sm:text-base md:text-xl lg:text-2xl text-gray-300 text-center max-w-2xl mx-auto px-3 font-light tracking-wide"
         >
           Where the Next Generation of Champions Begins
         </motion.p>
@@ -102,15 +102,15 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1, duration: 0.7 }}
-          className="relative z-10 flex flex-col sm:flex-row gap-4 mt-10"
+          className="relative z-10 flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 sm:mt-10 px-4 max-w-lg mx-auto w-full sm:max-w-fit"
         >
-          <Link href="/auth">
-            <Button className="bg-red-600 hover:bg-red-500 text-white font-brand font-bold py-4 px-10 rounded-xl text-lg shadow-[0_0_30px_rgba(255,0,0,0.3)] hover:shadow-[0_0_50px_rgba(255,0,0,0.5)] transition-all duration-300 hover:scale-105">
+          <Link href="/auth" className="flex-1 sm:flex-none">
+            <Button className="w-full bg-red-600 hover:bg-red-500 text-white font-brand font-bold py-3 sm:py-4 px-6 sm:px-10 rounded-xl text-sm sm:text-base md:text-lg shadow-[0_0_30px_rgba(255,0,0,0.3)] hover:shadow-[0_0_50px_rgba(255,0,0,0.5)] transition-all duration-300 hover:scale-105">
               🚀 Register Now
             </Button>
           </Link>
-          <a href="#mission">
-            <Button variant="outline" className="border-red-600/50 text-red-400 hover:bg-red-900/30 hover:text-white font-brand py-4 px-10 rounded-xl text-lg transition-all duration-300">
+          <a href="#mission" className="flex-1 sm:flex-none">
+            <Button variant="outline" className="w-full border-red-600/50 text-red-400 hover:bg-red-900/30 hover:text-white font-brand py-3 sm:py-4 px-6 sm:px-10 rounded-xl text-sm sm:text-base md:text-lg transition-all duration-300">
               Learn More ↓
             </Button>
           </a>
@@ -134,16 +134,16 @@ export default function Home() {
       </section>
 
       {/* ═══ ROLLING IMAGE MARQUEE ═══ */}
-      <section className="relative py-8 overflow-hidden bg-black/50 border-y border-red-900/20">
+      <section className="relative py-6 sm:py-8 overflow-hidden bg-black/50 border-y border-red-900/20">
         <div className="animate-slide-left marquee-strip">
           {[...sportsImages, ...sportsImages, ...sportsImages].map((img, i) => (
-            <img key={i} src={img} alt="" className="h-28 md:h-36 w-48 md:w-64 rounded-xl object-cover opacity-70 hover:opacity-100 transition-opacity" />
+            <img key={i} src={img} alt="" className="h-20 sm:h-28 md:h-36 w-32 sm:w-48 md:w-64 rounded-xl object-cover opacity-70 hover:opacity-100 transition-opacity flex-shrink-0" />
           ))}
         </div>
       </section>
 
       {/* ═══ MISSION SECTION ═══ */}
-      <section id="mission" className="relative py-24 px-4">
+      <section id="mission" className="relative py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto text-center">
           <motion.div
             initial="hidden"
@@ -153,7 +153,7 @@ export default function Home() {
             custom={0}
           >
             <span className="badge-premium mb-4 inline-block">Our Mission</span>
-            <h2 className="font-brand text-4xl md:text-5xl font-bold text-luxury mt-2">
+            <h2 className="font-brand text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-luxury mt-2">
               More Than Just Sports
             </h2>
             <div className="flex justify-center my-4">
@@ -164,7 +164,7 @@ export default function Home() {
                 style={{ filter: 'drop-shadow(0 0 10px rgba(255,0,0,0.5))' }}
               />
             </div>
-            <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl mx-auto leading-relaxed px-2">
               At <span className="text-red-400 font-semibold font-brand">WhozNexxSports</span>, we believe every child carries the spirit of a champion.
               Our programs forge not just athletic skills but character, confidence, and community.
               We provide a world-class stage for young athletes to discover their greatness — through discipline, mentorship, and the sheer joy of competition.
@@ -174,7 +174,7 @@ export default function Home() {
       </section>
 
       {/* ═══ FEATURES GRID ═══ */}
-      <section className="relative py-20 px-4">
+      <section className="relative py-16 sm:py-20 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           <motion.h2
             initial="hidden"
@@ -182,11 +182,11 @@ export default function Home() {
             viewport={{ once: true }}
             variants={fadeUp}
             custom={0}
-            className="font-brand text-3xl md:text-4xl font-bold text-center text-luxury mb-14"
+            className="font-brand text-2xl sm:text-3xl md:text-4xl font-bold text-center text-luxury mb-10 sm:mb-14 px-2"
           >
             The WhozNexx Advantage
           </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {features.map((feat, i) => (
               <motion.div
                 key={feat.title}
@@ -197,9 +197,9 @@ export default function Home() {
                 custom={i + 1}
                 className="glass-card rounded-2xl p-6 text-center card-3d group"
               >
-                <div className="text-4xl mb-4">{feat.icon}</div>
-                <h3 className="font-brand text-xl font-bold text-white mb-2">{feat.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{feat.desc}</p>
+                <div className="text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">{feat.icon}</div>
+                <h3 className="font-brand text-base sm:text-lg md:text-xl font-bold text-white mb-2">{feat.title}</h3>
+                <p className="text-gray-400 text-xs sm:text-sm md:text-base leading-relaxed">{feat.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -207,16 +207,16 @@ export default function Home() {
       </section>
 
       {/* ═══ REVERSE MARQUEE ═══ */}
-      <section className="relative py-8 overflow-hidden bg-black/50 border-y border-red-900/20">
+      <section className="relative py-6 sm:py-8 overflow-hidden bg-black/50 border-y border-red-900/20">
         <div className="animate-slide-right marquee-strip">
           {[...sportsImages, ...sportsImages, ...sportsImages].map((img, i) => (
-            <img key={i} src={img} alt="" className="h-28 md:h-36 w-48 md:w-64 rounded-xl object-cover opacity-70 hover:opacity-100 transition-opacity" />
+            <img key={i} src={img} alt="" className="h-20 sm:h-28 md:h-36 w-32 sm:w-48 md:w-64 rounded-xl object-cover opacity-70 hover:opacity-100 transition-opacity flex-shrink-0" />
           ))}
         </div>
       </section>
 
       {/* ═══ SPORTS SHOWCASE ═══ */}
-      <section className="relative py-24 px-4">
+      <section className="relative py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto text-center">
           <motion.h2
             initial="hidden"
@@ -224,12 +224,12 @@ export default function Home() {
             viewport={{ once: true }}
             variants={fadeUp}
             custom={0}
-            className="font-brand text-3xl md:text-4xl font-bold text-luxury mb-4"
+            className="font-brand text-2xl sm:text-3xl md:text-4xl font-bold text-luxury mb-3 sm:mb-4 px-2"
           >
             Choose Your Arena
           </motion.h2>
-          <p className="text-gray-400 mb-12 text-lg">Four epic sports. Unlimited potential.</p>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <p className="text-gray-400 mb-8 sm:mb-12 text-sm sm:text-base md:text-lg px-2">Four epic sports. Unlimited potential.</p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {[
               { name: 'Football', img: '/football1.jpg', color: 'from-red-600' },
               { name: 'Baseball', img: '/baseball1.jpg', color: 'from-yellow-600' },
@@ -243,7 +243,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 variants={fadeUp}
                 custom={i + 1}
-                className="relative rounded-2xl overflow-hidden group card-3d aspect-[3/4]"
+                className="relative rounded-lg sm:rounded-2xl overflow-hidden group card-3d aspect-[3/4]"
               >
                 <img
                   src={s.img}
@@ -251,8 +251,8 @@ export default function Home() {
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className={`absolute inset-0 bg-gradient-to-t ${s.color}/60 via-transparent to-black/80 group-hover:opacity-90 transition-opacity`} />
-                <div className="absolute inset-0 flex flex-col items-center justify-end p-4 pb-6">
-                  <span className="font-brand text-xl md:text-2xl font-bold text-white drop-shadow-lg">{s.name}</span>
+                <div className="absolute inset-0 flex flex-col items-center justify-end p-3 sm:p-4 pb-4 sm:pb-6">
+                  <span className="font-brand text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-white drop-shadow-lg">{s.name}</span>
                 </div>
               </motion.div>
             ))}
@@ -261,7 +261,7 @@ export default function Home() {
       </section>
 
       {/* ═══ FINAL CTA ═══ */}
-      <section className="relative py-24 px-4">
+      <section className="relative py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
             initial="hidden"
@@ -273,18 +273,18 @@ export default function Home() {
             <img
               src="/logo88.png"
               alt=""
-              className="h-16 w-auto mx-auto mb-6 opacity-60"
+              className="h-12 sm:h-16 w-auto mx-auto mb-4 sm:mb-6 opacity-60"
               style={{ filter: 'drop-shadow(0 0 16px rgba(255,0,0,0.5))' }}
             />
-            <h2 className="font-brand text-4xl md:text-5xl font-bold text-luxury mb-4">
+            <h2 className="font-brand text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-luxury mb-3 sm:mb-4 px-2">
               Ready to Play?
             </h2>
-            <p className="text-gray-400 text-lg mb-8">
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg mb-6 sm:mb-8 px-2">
               Registration for the <span className="text-red-400 font-semibold">February 25, 2026</span> event is open now.
               Secure your child&apos;s spot and let their journey begin.
             </p>
-            <Link href="/auth">
-              <Button className="bg-red-600 hover:bg-red-500 text-white font-brand font-bold py-4 px-14 rounded-xl text-xl shadow-[0_0_40px_rgba(255,0,0,0.3)] hover:shadow-[0_0_60px_rgba(255,0,0,0.5)] transition-all duration-300 hover:scale-105">
+            <Link href="/auth" className="inline-block">
+              <Button className="bg-red-600 hover:bg-red-500 text-white font-brand font-bold py-3 sm:py-4 px-8 sm:px-14 rounded-xl text-sm sm:text-base md:text-lg lg:text-xl shadow-[0_0_40px_rgba(255,0,0,0.3)] hover:shadow-[0_0_60px_rgba(255,0,0,0.5)] transition-all duration-300 hover:scale-105 whitespace-nowrap">
                 Sign Up Now →
               </Button>
             </Link>
