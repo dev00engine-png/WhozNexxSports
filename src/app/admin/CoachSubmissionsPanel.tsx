@@ -37,6 +37,24 @@ export default function CoachSubmissionsPanel() {
       setLoading(false);
     };
     fetchCoaches();
+    // Subscribe to realtime inserts so admin panel updates live
+    let subscription: any = null;
+    try {
+      if (supabase) {
+        subscription = supabase
+          .channel('public:coach_submissions')
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'coach_submissions' }, (payload) => {
+            setCoaches((prev) => [payload.new as CoachSubmission, ...(prev || [])]);
+          })
+          .subscribe();
+      }
+    } catch (err) {
+      console.warn('Realtime subscription failed', err);
+    }
+
+    return () => {
+      if (subscription && typeof subscription.unsubscribe === 'function') subscription.unsubscribe();
+    };
   }, []);
 
   return (
