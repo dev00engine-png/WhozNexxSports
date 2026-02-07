@@ -59,14 +59,21 @@ export default function CoachSubmissionsPanel() {
 
   return (
     <div className="max-w-4xl mx-auto py-10">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="font-brand text-2xl sm:text-3xl md:text-4xl font-bold text-center text-luxury mb-8"
-      >
-        Coach Submissions
-      </motion.h2>
+      <div className="mb-8">
+        <div className="rounded-2xl overflow-hidden shadow-lg">
+          <div className="grid grid-cols-3 gap-1">
+            <img src="/coach1.jpg" alt="" className="w-full h-24 object-cover" />
+            <img src="/coach2.jpg" alt="" className="w-full h-24 object-cover" />
+            <img src="/coach3.jpg" alt="" className="w-full h-24 object-cover" />
+          </div>
+          <div className="p-4 bg-black/60">
+            <motion.h2 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="font-brand text-2xl sm:text-3xl md:text-4xl font-bold text-luxury">
+              Coach Submissions
+            </motion.h2>
+            <p className="text-sm text-gray-400 mt-1">Prospective coaches who applied to join WhozNexxSports.</p>
+          </div>
+        </div>
+      </div>
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
