@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 interface CoachSubmission {
   id: string;
@@ -22,6 +23,8 @@ interface CoachSubmission {
 export default function CoachSubmissionsPanel() {
   const [coaches, setCoaches] = useState<CoachSubmission[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCoach, setSelectedCoach] = useState<CoachSubmission | null>(null);
+  const images = ['/coach1.jpg','/coach2.jpg','/coach3.jpg','/coach4.jpg','/coach5.jpg','/coach6.jpg'];
 
   useEffect(() => {
     const fetchCoaches = async () => {
@@ -61,10 +64,10 @@ export default function CoachSubmissionsPanel() {
     <div className="max-w-4xl mx-auto py-10">
       <div className="mb-8">
         <div className="rounded-2xl overflow-hidden shadow-lg">
-          <div className="grid grid-cols-3 gap-1">
-            <img src="/coach1.jpg" alt="" className="w-full h-24 object-cover" />
-            <img src="/coach2.jpg" alt="" className="w-full h-24 object-cover" />
-            <img src="/coach3.jpg" alt="" className="w-full h-24 object-cover" />
+          <div className="grid grid-cols-6 gap-1">
+            {images.map((src, i) => (
+              <img key={`h-${i}`} src={src} alt="" className="w-full h-20 object-cover" />
+            ))}
           </div>
           <div className="p-4 bg-black/60">
             <motion.h2 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="font-brand text-2xl sm:text-3xl md:text-4xl font-bold text-luxury">
@@ -94,7 +97,7 @@ export default function CoachSubmissionsPanel() {
             </thead>
             <tbody className="divide-y divide-gray-800/50">
               {coaches.map((coach) => (
-                <tr key={coach.id} className="hover:bg-red-900/10 transition-colors">
+                <tr key={coach.id} role="button" onClick={() => setSelectedCoach(coach)} className="hover:bg-red-900/10 transition-colors cursor-pointer">
                   <td className="px-4 py-3 font-semibold text-white">{coach.name}</td>
                   <td className="px-4 py-3 text-gray-300">{coach.sport}</td>
                   <td className="px-4 py-3 text-yellow-400 font-semibold">{coach.phone}</td>
@@ -106,6 +109,31 @@ export default function CoachSubmissionsPanel() {
           </table>
         </div>
       )}
+
+      {/* Detail dialog */}
+      <Dialog open={!!selectedCoach} onOpenChange={(open) => { if (!open) setSelectedCoach(null); }}>
+        <DialogContent>
+          {selectedCoach && (
+            <div>
+              <DialogTitle>{selectedCoach.name}</DialogTitle>
+              <DialogDescription className="text-sm text-gray-300">
+                <div className="space-y-2 mt-3">
+                  <div><strong>Sport:</strong> {selectedCoach.sport}</div>
+                  <div><strong>Phone:</strong> {selectedCoach.phone}</div>
+                  <div><strong>Email:</strong> {selectedCoach.email}</div>
+                  <div><strong>Best Times:</strong> <div className="whitespace-normal break-words">{selectedCoach.best_times}</div></div>
+                  <div><strong>Availability:</strong> <div className="whitespace-normal break-words">{selectedCoach.availability}</div></div>
+                  <div><strong>Background:</strong> <div className="whitespace-normal break-words">{selectedCoach.background}</div></div>
+                  <div><strong>Pitch:</strong> <div className="whitespace-normal break-words">{selectedCoach.pitch}</div></div>
+                  {selectedCoach.final_thoughts && <div><strong>Final Thoughts:</strong> <div className="whitespace-normal break-words">{selectedCoach.final_thoughts}</div></div>}
+                  <div className="text-xs text-gray-400">Submitted: {selectedCoach.created_at ? new Date(selectedCoach.created_at).toLocaleString() : '—'}</div>
+                </div>
+              </DialogDescription>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
     </div>
   );
 }

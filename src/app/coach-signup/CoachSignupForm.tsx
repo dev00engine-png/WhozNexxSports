@@ -102,11 +102,11 @@ export default function CoachSignupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-gradient-to-br from-black/70 via-black/60 to-black/50 rounded-3xl shadow-2xl p-8 sm:p-12 space-y-6 border border-red-900/20 backdrop-blur-md">
+    <form onSubmit={handleSubmit} className="max-w-[1400px] mx-auto bg-gradient-to-br from-black/70 via-black/60 to-black/50 rounded-3xl shadow-2xl p-12 sm:p-20 space-y-8 border border-red-900/20 backdrop-blur-md text-lg">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-brand font-bold text-white mb-1">Coach Application</h2>
-          <p className="text-gray-300 text-sm">Fill this out to be considered for a coaching position. Submission is consideration only.</p>
+          <h2 className="text-4xl sm:text-5xl font-brand font-bold text-white mb-2">Coach Application</h2>
+          <p className="text-gray-300 text-base">Fill this out to be considered for a coaching position. Submission is consideration only.</p>
         </div>
         <div className="hidden sm:block">
           <img src="/coach-illustration.png" alt="Coaching" className="h-20 w-auto opacity-90" />
@@ -116,34 +116,34 @@ export default function CoachSignupForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="text-xs text-gray-300 mb-1 block">Full Name</label>
-          <input name="name" value={form.name} onChange={handleChange} required placeholder="Full Name" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none transition" />
+          <input name="name" value={form.name} onChange={handleChange} required placeholder="Full Name" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-2xl px-6 py-4 text-lg focus:ring-4 focus:ring-red-600 outline-none transition whitespace-normal break-words" />
         </div>
         <div>
           <label className="text-xs text-gray-300 mb-1 block">Age</label>
-          <input name="age" value={form.age} onChange={handleChange} required placeholder="Age" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none transition" type="number" min="18" />
+          <input name="age" value={form.age} onChange={handleChange} required placeholder="Age" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-2xl px-6 py-4 text-lg focus:ring-4 focus:ring-red-600 outline-none transition" type="number" min="18" />
         </div>
 
         <div className="sm:col-span-1">
           <label className="text-xs text-gray-300 mb-1 block">Phone</label>
-          <input name="phone" value={form.phone} onChange={handleChange} required placeholder="Phone Number" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none transition" />
+          <input name="phone" value={form.phone} onChange={handleChange} required placeholder="Phone Number" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-2xl px-6 py-4 text-lg focus:ring-4 focus:ring-red-600 outline-none transition" />
         </div>
         <div>
           <label className="text-xs text-gray-300 mb-1 block">Email</label>
-          <input name="email" value={form.email} onChange={handleChange} required placeholder="Email" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none transition" type="email" />
+          <input name="email" value={form.email} onChange={handleChange} required placeholder="Email" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-2xl px-6 py-4 text-lg focus:ring-4 focus:ring-red-600 outline-none transition" type="email" />
         </div>
 
         <div className="sm:col-span-1">
           <label className="text-xs text-gray-300 mb-1 block">Best Times to Reach</label>
-          <input name="bestTimes" value={form.bestTimes} onChange={handleChange} required placeholder="e.g., Weekdays after 5pm" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none transition" />
+          <textarea name="bestTimes" value={form.bestTimes} onChange={handleChange} required placeholder="e.g., Weekdays after 5pm" rows={2} className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 h-20 resize-y focus:ring-2 focus:ring-red-600 outline-none transition whitespace-normal break-words" />
         </div>
         <div>
           <label className="text-xs text-gray-300 mb-1 block">Availability</label>
-          <input name="availability" value={form.availability} onChange={handleChange} required placeholder="Days / times available" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none transition" />
+          <textarea name="availability" value={form.availability} onChange={handleChange} required placeholder="Days / times available" rows={2} className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 h-20 resize-y focus:ring-2 focus:ring-red-600 outline-none transition whitespace-normal break-words" />
         </div>
 
         <div className="sm:col-span-2">
           <label className="text-xs text-gray-300 mb-1 block">Coaching Background</label>
-          <input name="background" value={form.background} onChange={handleChange} required placeholder="Brief coaching history, certifications" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-600 outline-none transition" />
+          <textarea name="background" value={form.background} onChange={handleChange} required placeholder="Brief coaching history, certifications" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 h-28 resize-y focus:ring-2 focus:ring-red-600 outline-none transition whitespace-normal break-words" />
         </div>
 
         <div>
@@ -153,12 +153,12 @@ export default function CoachSignupForm() {
 
         <div className="sm:col-span-2">
           <label className="text-xs text-gray-300 mb-1 block">Why would you be a good fit?</label>
-          <textarea name="pitch" value={form.pitch} onChange={handleChange} required placeholder="Tell us what you'd bring to WhozNexxSports" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 h-28 resize-y focus:ring-2 focus:ring-red-600 outline-none transition" />
+          <textarea name="pitch" value={form.pitch} onChange={handleChange} required placeholder="Tell us what you'd bring to WhozNexxSports" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-2xl px-6 py-4 h-36 resize-y focus:ring-4 focus:ring-red-600 outline-none transition whitespace-normal break-words text-lg" />
         </div>
 
         <div className="sm:col-span-2">
           <label className="text-xs text-gray-300 mb-1 block">Final Thoughts (optional)</label>
-          <textarea name="finalThoughts" value={form.finalThoughts} onChange={handleChange} placeholder="Anything else to add" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-lg px-4 py-3 h-20 resize-y focus:ring-2 focus:ring-red-600 outline-none transition" />
+          <textarea name="finalThoughts" value={form.finalThoughts} onChange={handleChange} placeholder="Anything else to add" className="w-full bg-black/60 text-white placeholder-gray-400 border border-gray-800 rounded-2xl px-6 py-4 h-28 resize-y focus:ring-4 focus:ring-red-600 outline-none transition whitespace-normal break-words text-lg" />
         </div>
 
         <div className="sm:col-span-2">
@@ -170,13 +170,12 @@ export default function CoachSignupForm() {
       </div>
 
       {error && <div className="text-sm text-red-400 bg-black/40 p-3 rounded-md">{error}</div>}
-      <div className="flex items-center gap-3">
-        <Button type="submit" disabled={loading} className="flex-1 bg-gradient-to-r from-red-600 via-red-500 to-red-600 hover:from-red-700 hover:to-red-500 text-white font-bold py-3 rounded-2xl text-lg shadow-lg transition-all duration-300 hover:scale-[1.02]">
+      <div className="flex items-center gap-4">
+        <Button type="submit" disabled={loading} className="flex-1 bg-gradient-to-r from-red-600 via-red-500 to-red-600 hover:from-red-700 hover:to-red-500 text-white font-bold py-4 rounded-2xl text-xl shadow-xl transition-all duration-300 hover:scale-[1.02]">
           {loading ? 'Submitting...' : 'Submit Application'}
         </Button>
-        <button type="button" onClick={() => setForm({name:'',age:'',phone:'',bestTimes:'',availability:'',background:'',sport:'',email:'',pitch:'',finalThoughts:'',acknowledgement:false})} className="px-4 py-3 rounded-lg border border-gray-800 text-gray-300 hover:bg-white/5">Reset</button>
+        <button type="button" onClick={() => setForm({name:'',age:'',phone:'',bestTimes:'',availability:'',background:'',sport:'',email:'',pitch:'',finalThoughts:'',acknowledgement:false})} className="px-6 py-4 rounded-2xl border border-gray-800 text-gray-300 hover:bg-white/5 text-lg">Reset</button>
       </div>
-      </form>
-    </div>
+    </form>
   );
 }
