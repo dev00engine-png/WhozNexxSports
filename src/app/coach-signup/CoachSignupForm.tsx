@@ -187,6 +187,7 @@ export default function CoachSignupForm() {
         </Button>
         <button type="button" onClick={() => setForm({name:'',age:'',phone:'',bestTimes:'',availability:'',background:'',sport:'',email:'',pitch:'',finalThoughts:'',acknowledgement:false})} className="px-4 py-3 rounded-lg border border-gray-800 text-gray-300 hover:bg-white/5">Reset</button>
       </div>
-    </form>
+      </form>
+    </div>
   );
 }
