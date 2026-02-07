@@ -81,7 +81,7 @@ export default function CoachSignupForm() {
       }
 
       setSubmitted(true);
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
       setError(err?.message || 'Submission failed.');
     } finally {
