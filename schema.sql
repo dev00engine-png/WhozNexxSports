@@ -36,9 +36,27 @@ CREATE TABLE kids (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Coach Submissions table
+CREATE TABLE coach_submissions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  age TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  best_times TEXT NOT NULL,
+  availability TEXT NOT NULL,
+  background TEXT NOT NULL,
+  sport TEXT NOT NULL,
+  email TEXT NOT NULL,
+  pitch TEXT NOT NULL,
+  final_thoughts TEXT,
+  acknowledgement BOOLEAN NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Enable Row Level Security (RLS)
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE kids ENABLE ROW LEVEL SECURITY;
+ALTER TABLE coach_submissions ENABLE ROW LEVEL SECURITY;
 
 -- Policies for profiles
 CREATE POLICY "Users can view own profile" ON profiles
@@ -78,6 +96,24 @@ CREATE POLICY "Admins can view all profiles" ON profiles
       SELECT 1 FROM profiles WHERE user_id = auth.uid() AND role = 'admin'
     )
   );
+
+-- Policies for coach submissions
+CREATE POLICY "Admins can view all coach submissions" ON coach_submissions
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM profiles WHERE user_id = auth.uid() AND role = 'admin'
+    )
+  );
+
+CREATE POLICY "Admins can insert coach submissions" ON coach_submissions
+  FOR INSERT WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM profiles WHERE user_id = auth.uid() AND role = 'admin'
+    )
+  );
+
+CREATE POLICY "Anyone can submit coach application" ON coach_submissions
+  FOR INSERT WITH CHECK (true);
 
 -- Function to handle new user signup (now stores phone)
 CREATE OR REPLACE FUNCTION public.handle_new_user()

@@ -266,6 +266,19 @@ export default function Admin() {
             Showing {filteredKids.length} of {kids.length} registrations
           </p>
         </div>
+
+        {/* Coach Submissions Panel */}
+        <div className="mt-16">
+          <div className="border-b border-red-900/30 mb-8 pb-4">
+            <h2 className="font-brand text-2xl sm:text-3xl md:text-4xl font-bold text-luxury">Coach Submissions</h2>
+            <p className="text-xs text-gray-400 mt-2">Prospective coaches who have applied to join WhozNexxSports.</p>
+          </div>
+          {/* Panel component */}
+          <div className="glass-card rounded-2xl border border-gray-800">
+            {/* @ts-ignore */}
+            {typeof window !== 'undefined' && require('./CoachSubmissionsPanel').default()}
+          </div>
+        </div>
       </div>
 
       {/* Detailed View Modal */}

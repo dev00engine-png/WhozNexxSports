@@ -260,6 +260,46 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ═══ JOIN OUR TEAM: COACHES INVITE SECTION ═══ */}
+      <section className="relative py-16 sm:py-24 px-4 sm:px-6 bg-gradient-to-br from-red-900/60 via-black/80 to-black/90">
+        <div className="max-w-4xl mx-auto text-center rounded-3xl shadow-2xl p-8 sm:p-12 bg-black/60 border border-red-900/30 animate-fade-in">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeUp}
+            custom={0}
+          >
+            <img
+              src="/coach-invite.png"
+              alt="Coach Invitation"
+              className="h-20 sm:h-28 w-auto mx-auto mb-6 animate-float"
+              style={{ filter: 'drop-shadow(0 0 24px rgba(255,0,0,0.7))' }}
+            />
+            <h2 className="font-brand text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-luxury mb-3 sm:mb-4 px-2">
+              Join Our Team: Prospective Coaches
+            </h2>
+            <p className="text-gray-300 text-base sm:text-lg md:text-xl mb-6 sm:mb-8 px-2">
+              Are you passionate about sports, mentorship, and making a difference? <span className="text-red-400 font-semibold">WhozNexxSports</span> is looking for inspiring coaches to help shape the next generation of champions. If you bring energy, expertise, and heart, we want to hear your story!
+            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.7 }}
+              className="flex justify-center mt-6"
+            >
+              <Link href="/coach-signup">
+                <Button className="bg-gradient-to-r from-red-600 via-red-400 to-red-600 hover:from-red-700 hover:to-red-500 text-white font-brand font-bold py-4 px-10 rounded-2xl text-lg shadow-[0_0_40px_rgba(255,0,0,0.3)] hover:shadow-[0_0_60px_rgba(255,0,0,0.5)] transition-all duration-300 hover:scale-105 animate-glow-pulse">
+                  Become a Coach →
+                </Button>
+              </Link>
+            </motion.div>
+            <div className="mt-8 text-gray-400 text-xs sm:text-sm max-w-2xl mx-auto bg-black/30 rounded-xl p-4 border border-red-900/20">
+              <strong className="text-red-400">Note:</strong> Submitting your application is a consideration, not a guarantee. WhozNexxSports does not owe you a job, reimbursement, or liability until signed on. Terms will be agreed upon if selected.
+            </div>
+          </motion.div>
+        </div>
+      </section>
       {/* ═══ FINAL CTA ═══ */}
       <section className="relative py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
