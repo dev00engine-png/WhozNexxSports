@@ -46,8 +46,8 @@ export default function CoachSubmissionsPanel() {
       if (supabase) {
         subscription = supabase
           .channel('public:coach_submissions')
-          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'coach_submissions' }, (payload) => {
-            setCoaches((prev) => [payload.new as CoachSubmission, ...(prev || [])]);
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'coach_submissions' }, (payload: { new: CoachSubmission }) => {
+            setCoaches((prev) => [payload.new, ...(prev || [])]);
           })
           .subscribe();
       }
